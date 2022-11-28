@@ -16,4 +16,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   messages:
     basename: lang\res
-      
+
+jwt:
+  secret: tokioschool

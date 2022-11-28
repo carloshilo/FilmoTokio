@@ -1,4 +1,4 @@
-package com.tokioschool.filmotokio.dominio.dto;
+package com.tokioschool.filmotokio.dominio;
 
 import java.util.Date;
 import java.util.Set;
@@ -53,5 +53,5 @@ public class Film {
     
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user; 
+    private User user;
 }

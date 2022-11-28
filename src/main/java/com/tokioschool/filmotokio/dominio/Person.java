@@ -1,4 +1,4 @@
-package com.tokioschool.filmotokio.dominio.dto;
+package com.tokioschool.filmotokio.dominio;
 
 import java.util.Set;
 

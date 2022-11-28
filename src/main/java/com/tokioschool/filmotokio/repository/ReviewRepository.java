@@ -1,12 +1,12 @@
 package com.tokioschool.filmotokio.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.tokioschool.filmotokio.dominio.dto.Review;
+import com.tokioschool.filmotokio.dominio.Review;
 
 @Repository
-public interface ReviewRepository extends CrudRepository<Review, Long> {
+public interface ReviewRepository extends JpaRepository<Review, Long> {
 
 }
 

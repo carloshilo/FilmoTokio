@@ -56,8 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
       .authorizeRequests()
         .antMatchers("/").permitAll()
         .antMatchers("/register").permitAll()
-        .antMatchers("/login").permitAll()
-        .antMatchers("/admin/**").hasAnyAuthority(ADMIN_ROLE)
+        .antMatchers("/users/login").permitAll()
         .anyRequest().authenticated()
     .and()
       .exceptionHandling()
@@ -82,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Override
-  public void configure(WebSecurity web) throws Exception {
+  public void configure(WebSecurity web) {
     web.ignoring().antMatchers(
       "/resources/**",
       "/static/**",

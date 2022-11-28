@@ -1,12 +1,13 @@
 package com.tokioschool.filmotokio.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import com.tokioschool.filmotokio.dominio.Role;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.tokioschool.filmotokio.dominio.dto.Role;
+import java.util.Optional;
 
 @Repository
-public interface RoleRepository extends CrudRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<Role, Long> {
 
-    Role findByName(String name);
+    Optional<Role> findByName(String name);
 }

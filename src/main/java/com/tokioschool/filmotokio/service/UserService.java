@@ -3,7 +3,7 @@ package com.tokioschool.filmotokio.service;
 import java.util.List;
 import java.util.Optional;
 
-import com.tokioschool.filmotokio.dominio.dto.User;
+import com.tokioschool.filmotokio.dominio.User;
 
 public interface UserService {
 	List<User> findAll();
