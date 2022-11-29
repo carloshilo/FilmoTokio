@@ -14,28 +14,20 @@ import org.springframework.web.servlet.ModelAndView;
 @AllArgsConstructor
 public class UserController {
 
-    private final @NonNull RoleService roleService;
+  private final @NonNull RoleService roleService;
 
-    @GetMapping("/login")
-    public ModelAndView login(ModelAndView modelAndView) {
-        modelAndView.setViewName("login");
-        return modelAndView;
-    }
+  @GetMapping("/login")
+  public ModelAndView login(ModelAndView modelAndView) {
+    modelAndView.setViewName("login");
+    return modelAndView;
+  }
 
-    @GetMapping("/register")
-    public ModelAndView registerUser(ModelAndView modelAndView) {
-        modelAndView.addObject("model", new CreateUserDTO());
-        modelAndView.addObject("roles", roleService.findAll());
-        modelAndView.setViewName("register");
-        return modelAndView;
-    }
+  @GetMapping("/register")
+  public ModelAndView registerUser(ModelAndView modelAndView) {
+    modelAndView.addObject("model", new CreateUserDTO());
+    modelAndView.addObject("roles", roleService.findAll());
+    modelAndView.setViewName("register");
+    return modelAndView;
+  }
 
-
-    @GetMapping
-    public ModelAndView index(ModelAndView modelAndView) {
-
-        modelAndView.addObject("titulo", "tokiofilm");
-        modelAndView.setViewName("index");
-        return modelAndView;
-    }
 }

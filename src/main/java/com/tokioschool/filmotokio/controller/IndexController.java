@@ -8,13 +8,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("")
 public class IndexController {
-	
-	@GetMapping
-	public ModelAndView index(ModelAndView modelAndView) {
 
-		modelAndView.addObject("titulo", "tokiofilm");
-		modelAndView.addObject("welcome", "Bienvenidos a FilmTokio");
-		modelAndView.setViewName("index");
-		return modelAndView;
-	}
+  @GetMapping
+  public ModelAndView index(ModelAndView modelAndView) {
+
+    modelAndView.addObject("titulo", "tokiofilm");
+    modelAndView.addObject("welcome", "Bienvenidos a FilmTokio");
+    modelAndView.setViewName("index");
+    return modelAndView;
+  }
 }

@@ -1,10 +1,9 @@
 package com.tokioschool.filmotokio.exception;
 
-public class UsernameAlreadyExistsException extends RuntimeException {
+import lombok.NoArgsConstructor;
 
-  public UsernameAlreadyExistsException() {
-    super();
-  }
+@NoArgsConstructor
+public class UsernameAlreadyExistsException extends RuntimeException {
 
   public UsernameAlreadyExistsException(String message) {
     super(message);

@@ -1,12 +1,15 @@
 package com.tokioschool.filmotokio.security;
 
-import static com.tokioschool.filmotokio.utils.Constants.ADMIN_ROLE;
 import static com.tokioschool.filmotokio.utils.Constants.LOGIN_FAILURE;
 import static com.tokioschool.filmotokio.utils.Constants.LOGIN_SUCCESS_URL;
 import static com.tokioschool.filmotokio.utils.Constants.LOGIN_URL;
 import static com.tokioschool.filmotokio.utils.Constants.LOGOUT_SUCCESS_URL;
 import static com.tokioschool.filmotokio.utils.Constants.LOGOUT_URL;
 
+import com.tokioschool.filmotokio.security.jwt.JwtAuthenticationEntryPoint;
+import com.tokioschool.filmotokio.security.jwt.JwtRequestFilter;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,12 +22,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import com.tokioschool.filmotokio.security.jwt.JwtAuthenticationEntryPoint;
-import com.tokioschool.filmotokio.security.jwt.JwtRequestFilter;
-
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 
 @Configuration
@@ -51,48 +48,48 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
-      .csrf()
+        .csrf()
         .disable()
-      .authorizeRequests()
+        .authorizeRequests()
         .antMatchers("/").permitAll()
         .antMatchers("/register").permitAll()
         .antMatchers("/users/login").permitAll()
         .anyRequest().authenticated()
-    .and()
-      .exceptionHandling()
+        .and()
+        .exceptionHandling()
         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-    .and()
-      .sessionManagement()
+        .and()
+        .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-    .and()
-      .formLogin()
+        .and()
+        .formLogin()
         .loginPage(LOGIN_URL)
         .loginProcessingUrl(LOGIN_URL)
         .successForwardUrl(LOGIN_SUCCESS_URL)
         .failureUrl(LOGIN_FAILURE)
-    .and()
-      .logout()
+        .and()
+        .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL))
         .logoutSuccessUrl(LOGOUT_SUCCESS_URL)
-    .and()
-      .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-      .headers().frameOptions().disable();
+        .and()
+        .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+        .headers().frameOptions().disable();
 
   }
 
   @Override
   public void configure(WebSecurity web) {
     web.ignoring().antMatchers(
-      "/resources/**",
-      "/static/**",
-      "/templates/**",
-      "/images/**",
-      "/styles/**",
-      "/css/**",
-      "/js/**",
-      "/fonts/**",
-      "/webjars/**",
-      "/api/auth"
+        "/resources/**",
+        "/static/**",
+        "/templates/**",
+        "/images/**",
+        "/styles/**",
+        "/css/**",
+        "/js/**",
+        "/fonts/**",
+        "/webjars/**",
+        "/api/auth"
     );
   }
 

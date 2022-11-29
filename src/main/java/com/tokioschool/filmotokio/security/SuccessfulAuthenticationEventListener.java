@@ -11,15 +11,16 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @AllArgsConstructor
-public class SuccessfulAuthenticationEventListener implements ApplicationListener<AuthenticationSuccessEvent> {
+public class SuccessfulAuthenticationEventListener implements
+    ApplicationListener<AuthenticationSuccessEvent> {
 
-    private final UserServiceImpl userService;
+  private final UserServiceImpl userService;
 
 
-    @Override
-    public void onApplicationEvent(AuthenticationSuccessEvent event) {
-        User user = (User) event.getAuthentication().getPrincipal();
-        log.info("User {} successfully logged in", user.getUsername());
-        userService.logged(user);
-    }
+  @Override
+  public void onApplicationEvent(AuthenticationSuccessEvent event) {
+    User user = (User) event.getAuthentication().getPrincipal();
+    log.info("User {} successfully logged in", user.getUsername());
+    userService.logged(user);
+  }
 }

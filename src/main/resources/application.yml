@@ -1,8 +1,8 @@
 spring:
- # sql:
-   # init.mode: always
+  # sql:
+  # init.mode: always
   jpa:
-   # defer-datasource-initialization: true
+    # defer-datasource-initialization: true
     hibernate:
       ddl-auto: update
     show-sql: true

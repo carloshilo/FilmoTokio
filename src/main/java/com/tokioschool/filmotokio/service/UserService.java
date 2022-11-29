@@ -11,6 +11,8 @@ public interface UserService {
 	void logged(User user);
 	
 	Optional<User> getByUsername(String username);
+
+	User getByUsernameOrThrow(String username);
 	
 	Optional<User> getById(long id);
 	

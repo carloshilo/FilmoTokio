@@ -1,4 +1,4 @@
-package com.tokioschool.filmotokio.security.jwt;
+package com.tokioschool.filmotokio.dominio.dto;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtRequest implements Serializable {
+public class LoginDTO implements Serializable {
 
 	@Serial
 	private static final long serialVersionUID = -4973204140021897181L;

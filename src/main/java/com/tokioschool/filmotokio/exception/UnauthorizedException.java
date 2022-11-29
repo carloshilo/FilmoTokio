@@ -1,13 +1,9 @@
 package com.tokioschool.filmotokio.exception;
 
-import org.springframework.security.authentication.BadCredentialsException;
+import lombok.NoArgsConstructor;
 
-import javax.naming.AuthenticationException;
-
+@NoArgsConstructor
 public class UnauthorizedException extends RuntimeException {
-
-  public UnauthorizedException() {
-  }
 
   public UnauthorizedException(String message) {
     super(message);

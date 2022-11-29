@@ -23,6 +23,8 @@ public class JwtTokenUtil implements Serializable {
 
 	public static final long JWT_TOKEN_VALIDITY = 3 * 60 * 60L;
 
+	public static final String BEARER = "Bearer ";
+
 	@Value("${jwt.secret}")
 	private String secret;
 
