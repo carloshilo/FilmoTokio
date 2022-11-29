@@ -1,10 +1,10 @@
-package com.tokioschool.filmotokio.dominio;
+package com.tokioschool.filmotokio.dominio.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public enum TypePersonEnum {
+public enum TypePerson {
   SCREENWRITER("Screenwriter"),
   MUSICIAN("Musician"),
   PHOTOGRAPHER("Photographer"),

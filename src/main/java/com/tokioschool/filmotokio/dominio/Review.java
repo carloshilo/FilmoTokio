@@ -1,5 +1,7 @@
 package com.tokioschool.filmotokio.dominio;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,8 +22,10 @@ import org.springframework.data.annotation.CreatedDate;
 @AllArgsConstructor
 @Data
 @Entity(name = "reviews")
-public class Review {
+public class Review implements Serializable {
 
+  @Serial
+  private static final long serialVersionUID = -8936769226103417764L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;

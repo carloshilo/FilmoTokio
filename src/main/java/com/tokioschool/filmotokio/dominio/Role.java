@@ -1,5 +1,7 @@
 package com.tokioschool.filmotokio.dominio;
 
+import java.io.Serial;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,7 +21,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "roles")
-public class Role {
+public class Role implements Serializable {
+
+  @Serial
+  private static final long serialVersionUID = -4424925217064911189L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

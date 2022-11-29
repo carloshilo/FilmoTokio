@@ -1,5 +1,6 @@
 package com.tokioschool.filmotokio.dominio;
 
+import java.io.Serial;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -28,6 +29,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity(name = "users")
 public class User implements UserDetails {
 
+  @Serial
+  private static final long serialVersionUID = 1382241345373591627L;
+  
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;

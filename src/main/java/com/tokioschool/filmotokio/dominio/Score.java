@@ -1,5 +1,7 @@
 package com.tokioschool.filmotokio.dominio;
 
+import java.io.Serial;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,7 +20,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity(name = "scores")
-public class Score {
+public class Score implements Serializable {
+
+  @Serial
+  private static final long serialVersionUID = -6452837090150588287L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

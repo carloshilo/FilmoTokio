@@ -1,5 +1,9 @@
 package com.tokioschool.filmotokio.dominio;
 
+import com.tokioschool.filmotokio.dominio.enums.TypePerson;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,7 +24,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity(name = "people")
-public class Person {
+public class Person implements Serializable {
+
+  @Serial
+  private static final long serialVersionUID = 1096082925448104965L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,9 +41,9 @@ public class Person {
   @NotNull
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
-  private TypePersonEnum type;
+  private TypePerson type;
 
   @ManyToMany(mappedBy = "people")
-  private Set<Film> films;
+  private Set<Film> films = new HashSet<>();
 
 }

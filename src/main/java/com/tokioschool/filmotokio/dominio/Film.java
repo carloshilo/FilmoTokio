@@ -1,6 +1,9 @@
 package com.tokioschool.filmotokio.dominio;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +29,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Entity(name = "films")
-public class Film {
+public class Film implements Serializable {
+
+  @Serial
+  private static final long serialVersionUID = 7292086160344139346L;
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,14 +58,14 @@ public class Film {
   private Date dateMigrate;
 
   @OneToMany(mappedBy = "film")
-  private Set<Review> reviews;
+  private Set<Review> reviews = new HashSet<>();
   @OneToMany(mappedBy = "film")
-  private Set<Score> scores;
+  private Set<Score> scores = new HashSet<>();
 
   @ManyToMany()
   @JoinTable(name = "rel_person_film", joinColumns = @JoinColumn(name = "film"),
       inverseJoinColumns = @JoinColumn(name = "person"))
-  private Set<Person> people;
+  private Set<Person> people = new HashSet<>();
 
   @ManyToOne
   @JoinColumn(name = "user_id")
