@@ -1,14 +1,14 @@
 <header xmlns:th="http://www.w3.org/1999/xhtml">
   <nav class="navbar static-top navbar-expand-md navbar-dark bg-dark"
        aria-label="Navbar">
-    <div class="container-fluid ">
+    <div class="container-fluid">
       <a class="navbar-brand" th:href="@{/}" th:text="'FilmTokio'"></a>
-      <div class="collapse navbar-collapse d-flex justify-content-end gx-5"
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end"
            id="Navbar Collapse">
-        <a class="btn btn-outline-primary"
-           th:text="'Login'" th:href="@{/users/login}"></a>
-        <a class="btn btn-outline-primary"
-           th:text="'Register'" th:href="@{/users/register}"></a>
+        <a class="btn btn-outline-light me-md-2"
+           th:text="'Login'" th:href="@{/login}"></a>
+        <a class="btn btn-outline-light"
+           th:text="'Register'" th:href="@{/signup}"></a>
       </div>
     </div>
   </nav>

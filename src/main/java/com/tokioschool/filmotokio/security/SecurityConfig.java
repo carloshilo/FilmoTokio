@@ -1,85 +1,67 @@
 package com.tokioschool.filmotokio.security;
 
-import static com.tokioschool.filmotokio.utils.Constants.LOGIN_FAILURE;
-import static com.tokioschool.filmotokio.utils.Constants.LOGIN_SUCCESS_URL;
-import static com.tokioschool.filmotokio.utils.Constants.LOGIN_URL;
-import static com.tokioschool.filmotokio.utils.Constants.LOGOUT_SUCCESS_URL;
-import static com.tokioschool.filmotokio.utils.Constants.LOGOUT_URL;
-
-import com.tokioschool.filmotokio.security.jwt.JwtAuthenticationEntryPoint;
-import com.tokioschool.filmotokio.security.jwt.JwtRequestFilter;
+import com.tokioschool.filmotokio.security.jwt.JwtEntryPoint;
+import com.tokioschool.filmotokio.security.jwt.JwtTokenFilter;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 
 @Configuration
 @Slf4j
 @AllArgsConstructor
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
+  private final @NonNull JwtEntryPoint jwtEntryPoint;
+  private final @NonNull JwtTokenFilter jwtTokenFilter;
 
-  private final UserDetailsServiceImpl userDetailsService;
-  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-  private final JwtRequestFilter jwtRequestFilter;
-
-  @Override
-  public void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+  @Bean
+  public AuthenticationManager authManager(HttpSecurity http, PasswordEncoder passwordEncoder,
+      UserDetailsService userDetailService)
+      throws Exception {
+    return http.getSharedObject(AuthenticationManagerBuilder.class)
+        .userDetailsService(userDetailService)
+        .passwordEncoder(passwordEncoder)
+        .and()
+        .build();
   }
 
   @Bean
-  @Override
-  public AuthenticationManager authenticationManagerBean() throws Exception {
-    return super.authenticationManagerBean();
-  }
-
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http
-        .csrf()
-        .disable()
+  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.cors().and().csrf().disable()
         .authorizeRequests()
-        .antMatchers("/").permitAll()
-        .antMatchers("/register").permitAll()
-        .antMatchers("/users/login").permitAll()
+        .antMatchers("/", "/signup").permitAll()
         .anyRequest().authenticated()
         .and()
+        .formLogin().permitAll()
+        .and()
+        .logout().permitAll()
+        .and()
         .exceptionHandling()
-        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+        .authenticationEntryPoint(jwtEntryPoint)
         .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-        .and()
-        .formLogin()
-        .loginPage(LOGIN_URL)
-        .loginProcessingUrl(LOGIN_URL)
-        .successForwardUrl(LOGIN_SUCCESS_URL)
-        .failureUrl(LOGIN_FAILURE)
-        .and()
-        .logout()
-        .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL))
-        .logoutSuccessUrl(LOGOUT_SUCCESS_URL)
-        .and()
-        .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-        .headers().frameOptions().disable();
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+    http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+    return http.build();
   }
 
-  @Override
-  public void configure(WebSecurity web) {
-    web.ignoring().antMatchers(
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return web -> web.ignoring().antMatchers(
         "/resources/**",
         "/static/**",
         "/templates/**",
@@ -95,6 +77,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Bean
   public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder(-1);
+    return new BCryptPasswordEncoder();
   }
 }

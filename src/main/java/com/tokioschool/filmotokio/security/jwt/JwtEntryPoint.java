@@ -5,19 +5,19 @@ import java.io.Serial;
 import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
-
-  @Serial
-  private static final long serialVersionUID = -5052228735351153549L;
+public class JwtEntryPoint implements AuthenticationEntryPoint {
 
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException authException) throws IOException {
+    log.error("Method commence failed");
     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Not Authorized");
   }
 }
