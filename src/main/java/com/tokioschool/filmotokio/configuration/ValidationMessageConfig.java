@@ -22,5 +22,5 @@ public class ValidationMessageConfig {
             bean.setValidationMessageSource(messageSource());
             return bean;
         }
-    
+
 }
