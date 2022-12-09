@@ -27,4 +27,11 @@ public class UserController {
     return modelAndView;
   }
 
+  @GetMapping("/register")
+  public ModelAndView registerUser(ModelAndView modelAndView) {
+    modelAndView.addObject("createUserDTO", new CreateUserDTO());
+    modelAndView.addObject("roles", roleService.findAll());
+    return modelAndView;
+  }
+
 }

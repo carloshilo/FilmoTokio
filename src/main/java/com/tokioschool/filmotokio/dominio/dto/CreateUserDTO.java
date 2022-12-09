@@ -5,10 +5,15 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class CreateUserDTO implements Serializable {
+@AllArgsConstructor
+@NoArgsConstructor
+public class CreateUserDTO extends PasswordDTO implements Serializable {
 
   @Serial
   private static final long serialVersionUID = -5659535844794150168L;
