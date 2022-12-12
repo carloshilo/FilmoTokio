@@ -11,8 +11,7 @@
     </div>
     <div class="row container-fluid">
       <div class="col d-flex justify-content-center">
-        <form enctype="multipart/form-data" th:action="@{/register}" th:method="POST"
-              th:object="${model}">
+        <form th:action="@{/users/signup}" th:method="post" th:object="${model}">
           <div class="row row-cols-2 g-2">
             <div class="col d-flex flex-column justify-content-end">
               <label class="form-label" for="usernameInput" th:text="'Username'"></label>
@@ -59,10 +58,6 @@
                      type="text">
               <div class="alert alert-warning mb-0 mt-1 py-1" th:errors="*{surname}"
                    th:if="${#fields.hasErrors('surname')}"></div>
-            </div>
-            <div class="col d-flex flex-column justify-content-end">
-              <label class="form-label" for="userImage" th:text="'Profile Picture'"></label>
-              <input class="form-control" id="userImage" name="userImage" type="file">
             </div>
             <div class="col d-flex flex-column justify-content-end">
               <label class="form-label" for="birthDate" th:text="'Birthdate'"></label>

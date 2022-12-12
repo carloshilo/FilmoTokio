@@ -21,7 +21,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class FilmoTokioApplication {
 
   private final @NonNull RoleRepository roleRepository;
-  private final UserRepository userRepository;
+  private final @NonNull UserRepository userRepository;
 
   public static void main(String[] args) {
     SpringApplication.run(FilmoTokioApplication.class, args);

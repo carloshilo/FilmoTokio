@@ -1,6 +1,6 @@
 spring:
   sql:
-   init.mode: ALWAYS
+   init.mode: always
   jpa:
     defer-datasource-initialization: true
     hibernate:
