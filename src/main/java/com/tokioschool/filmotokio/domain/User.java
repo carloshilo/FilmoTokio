@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,17 +17,28 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * Usuario de la aplicación
+ * User application
  */
-@Data
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails {
 
   @Serial
@@ -60,8 +72,9 @@ public class User implements UserDetails {
   @Column(name = "last_login")
   private LocalDateTime lastLogin;
   @NotNull
+  @Default
   @Column(name = "active", nullable = false)
-  private boolean active;
+  private boolean active = true;
 
   @OneToMany(mappedBy = "user")
   private Set<Film> films;
