@@ -1,10 +1,8 @@
-package com.tokioschool.filmotokio.dominio.dto;
+package com.tokioschool.filmotokio.domain.dto;
 
-import com.tokioschool.filmotokio.dominio.Role;
+import com.tokioschool.filmotokio.domain.Role;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,7 +20,7 @@ public class CreateUserDTO extends PasswordDTO implements Serializable {
   private String name;
   private String surname;
   private String email;
-  private Set<Role> roles = new HashSet<>();
+  private Role role;
 
   private String birthDate;
   private String password;

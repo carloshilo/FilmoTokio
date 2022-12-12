@@ -1,4 +1,4 @@
-package com.tokioschool.filmotokio.dominio.records;
+package com.tokioschool.filmotokio.domain.records;
 
 import java.io.Serial;
 import java.io.Serializable;

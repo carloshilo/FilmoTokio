@@ -1,6 +1,6 @@
-package com.tokioschool.filmotokio.dominio;
+package com.tokioschool.filmotokio.domain;
 
-import com.tokioschool.filmotokio.dominio.enums.TypePerson;
+import com.tokioschool.filmotokio.domain.enums.TypePerson;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;

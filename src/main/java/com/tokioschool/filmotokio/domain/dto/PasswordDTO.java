@@ -1,4 +1,4 @@
-package com.tokioschool.filmotokio.dominio.dto;
+package com.tokioschool.filmotokio.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

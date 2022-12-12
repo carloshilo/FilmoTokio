@@ -1,4 +1,4 @@
-package com.tokioschool.filmotokio.dominio.enums;
+package com.tokioschool.filmotokio.domain.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

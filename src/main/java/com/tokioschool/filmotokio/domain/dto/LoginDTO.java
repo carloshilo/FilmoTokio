@@ -1,4 +1,4 @@
-package com.tokioschool.filmotokio.dominio.dto;
+package com.tokioschool.filmotokio.domain.dto;
 
 import java.io.Serial;
 import java.io.Serializable;

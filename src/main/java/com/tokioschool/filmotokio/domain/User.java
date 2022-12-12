@@ -1,4 +1,4 @@
-package com.tokioschool.filmotokio.dominio;
+package com.tokioschool.filmotokio.domain;
 
 import java.io.Serial;
 import java.time.LocalDate;

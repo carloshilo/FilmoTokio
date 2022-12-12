@@ -1,7 +1,8 @@
-package com.tokioschool.filmotokio.dominio;
+package com.tokioschool.filmotokio.domain;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,24 +15,29 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Entity(name = "scores")
-public class Score implements Serializable {
+@Entity(name = "reviews")
+public class Review implements Serializable {
 
   @Serial
-  private static final long serialVersionUID = -6452837090150588287L;
-
+  private static final long serialVersionUID = -8936769226103417764L;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   @NotNull
   @Column(nullable = false)
-  private String value;
-
+  private String title;
+  @NotNull
+  @Column(name = "text_review", nullable = false)
+  private String textReview;
+  @CreatedDate
+  @Column(nullable = false)
+  private Date date;
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;

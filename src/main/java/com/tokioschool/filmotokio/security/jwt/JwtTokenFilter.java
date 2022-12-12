@@ -2,7 +2,7 @@ package com.tokioschool.filmotokio.security.jwt;
 
 import static com.tokioschool.filmotokio.security.jwt.JwtProvider.BEARER;
 
-import com.tokioschool.filmotokio.dominio.User;
+import com.tokioschool.filmotokio.domain.User;
 import com.tokioschool.filmotokio.security.UserDetailsServiceImpl;
 import java.io.IOException;
 import javax.servlet.FilterChain;
