@@ -92,6 +92,21 @@ public class User implements UserDetails {
     return Collections.singleton(new SimpleGrantedAuthority(role.getName()));
   }
 
+  public void update(User user) {
+    if (user.getUsername() != null) {
+      this.username = user.getUsername();
+    }
+    if (user.getEmail() != null) {
+      this.email = user.getEmail();
+    }
+    if (user.getName() != null) {
+      this.name = user.getName();
+    }
+    if (user.getSurname() != null) {
+      this.surname = user.getSurname();
+    }
+  }
+
   @Override
   public boolean isAccountNonExpired() {
     return true;
