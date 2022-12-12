@@ -1,6 +1,6 @@
 package com.tokioschool.filmotokio.repository;
 
-import com.tokioschool.filmotokio.dominio.Review;
+import com.tokioschool.filmotokio.domain.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

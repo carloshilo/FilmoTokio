@@ -2,7 +2,7 @@ package com.tokioschool.filmotokio.controller;
 
 import static com.tokioschool.filmotokio.utils.Constants.ADMIN_ROLE;
 
-import com.tokioschool.filmotokio.dominio.dto.CreateUserDTO;
+import com.tokioschool.filmotokio.domain.dto.CreateUserDTO;
 import com.tokioschool.filmotokio.service.RoleService;
 import java.util.Objects;
 import lombok.AllArgsConstructor;

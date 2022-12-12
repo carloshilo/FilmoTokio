@@ -1,6 +1,6 @@
 package com.tokioschool.filmotokio.service.impl;
 
-import com.tokioschool.filmotokio.dominio.Role;
+import com.tokioschool.filmotokio.domain.Role;
 import com.tokioschool.filmotokio.repository.RoleRepository;
 import com.tokioschool.filmotokio.service.RoleService;
 import java.util.List;

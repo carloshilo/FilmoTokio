@@ -1,6 +1,6 @@
 package com.tokioschool.filmotokio.security.jwt;
 
-import com.tokioschool.filmotokio.dominio.User;
+import com.tokioschool.filmotokio.domain.User;
 import com.tokioschool.filmotokio.properties.JwtProperties;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
