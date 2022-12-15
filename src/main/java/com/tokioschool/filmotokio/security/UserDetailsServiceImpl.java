@@ -1,5 +1,6 @@
 package com.tokioschool.filmotokio.security;
 
+import com.tokioschool.filmotokio.exception.UserNotFoundException;
 import com.tokioschool.filmotokio.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -15,13 +16,18 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-  private final @NonNull UserService userService;
+    private final @NonNull UserService userService;
 
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    log.info("Fetching UserDetails for {}", username);
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        try {
+            log.info("Fetching UserDetails for {}", username);
+            return userService.getByUsernameOrThrow(username);
 
-    return userService.getByUsernameOrThrow(username);
-  }
+        } catch (UserNotFoundException e) {
+            log.error("User {} not found", username, e);
+            throw new UsernameNotFoundException(e.getMessage(), e);
+        }
+    }
 
 }
