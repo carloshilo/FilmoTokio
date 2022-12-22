@@ -13,10 +13,6 @@ public class FileUtils {
 
     private static ResourceLoader resourceLoader;
 
-    public FileUtils(ResourceLoader resourceLoader) {
-        FileUtils.resourceLoader = resourceLoader;
-    }
-
     private static Path getRootResourcePath() throws IOException {
         return Paths.get(resourceLoader.getResource("classpath:").getURI());
     }
