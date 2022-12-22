@@ -9,28 +9,28 @@
         <a href="/">
             <img class="mb-4 rounded-circle" src="" th:src="@{/images/cinema.png}" alt="" height="100">
         </a>
-        <h1 class="h3 mb-3 fw-normal" th:text="'Please sign in'"></h1>
+        <h1 class="h3 mb-3 fw-normal" th:text="'Por favor, regístrate'"></h1>
 
         <div class="form-floating">
-            <input type="text" class="form-control" id="username" name="username" placeholder="Username"
+            <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de usuario"
                    required autofocus>
-            <label for="username" th:text="'Username'"></label>
+            <label for="username" th:text="'Nombre de usuario'"></label>
         </div>
         <div class="form-floating">
             <input type="password" class="form-control" name="password" id="password"
-                   placeholder="Password" autofocus>
-            <label for="password" th:text="'Password'"></label>
+                   placeholder="Contraseña" autofocus>
+            <label for="password" th:text="'Contraseña'"></label>
         </div>
         <div class="checkbox mb-2">
             <label>
-                <input type="checkbox" value="remember-me" th:text="'Remember me'">
+                <input type="checkbox" value="remember-me" th:text="'Recuérdame'">
             </label>
         </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit" th:text="'Sign in'"></button>
+        <button class="w-100 btn btn-lg btn-primary" type="submit" th:text="'Entrar'"></button>
 
         <br/><br/>
         <div th:if="${param.error}" class="alert alert-danger" role="alert"
-             th:text="'Incorrect username or password.'">
+             th:text="'Nombre de usuario o contraseña incorrectos.'">
         </div>
     </form>
 </main>
