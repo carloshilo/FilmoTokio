@@ -23,7 +23,5 @@ public class CreateUserDTO extends PasswordDTO {
   private Role role;
 
   private String birthDate;
-  private String password;
-  private String confirmPassword;
 
 }

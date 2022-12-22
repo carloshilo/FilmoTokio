@@ -42,7 +42,7 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.cors().and().csrf().disable()
         .authorizeRequests()
-        .antMatchers("/", "/users/signup").permitAll()
+        .antMatchers("/", "/index", "/users/signup").permitAll()
         .anyRequest().authenticated()
         .and()
         .formLogin().permitAll()
