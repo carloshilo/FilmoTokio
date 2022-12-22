@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUserDTO extends PasswordDTO implements Serializable {
+public class CreateUserDTO extends PasswordDTO {
 
   @Serial
   private static final long serialVersionUID = -5659535844794150168L;
