@@ -28,7 +28,7 @@ public class FileServiceImpl implements FileService {
   private final @NonNull ResourceLoader resourceLoader;
 
   @Override
-  public void saveUserImage(MultipartFile file, String fileName) throws ImageUploadException {
+  public void saveFile(MultipartFile file, String fileName) throws ImageUploadException {
     log.info("Saving file {} as {}", file, fileName);
     try (InputStream fileStream = file.getInputStream()) {
       Path imagePath = getResourcePath(directoryProperties.users(), fileName);
@@ -45,39 +45,10 @@ public class FileServiceImpl implements FileService {
   }
 
   @Override
-  public void saveFilmImage(MultipartFile file, String fileName) throws ImageUploadException {
-    log.info("Saving file {} as {}", file, fileName);
-    try (InputStream fileStream = file.getInputStream()) {
-      Path imagePath = getResourcePath(directoryProperties.films(), fileName);
-      if (Files.exists(imagePath)) {
-        Files.copy(fileStream, imagePath, StandardCopyOption.REPLACE_EXISTING);
-      } else {
-        Files.write(imagePath, fileStream.readAllBytes(), StandardOpenOption.CREATE_NEW,
-            StandardOpenOption.WRITE);
-      }
-    } catch (IOException e) {
-      log.error("Error saving file {}", fileName, e);
-      throw new ImageUploadException("Image Upload Failed", e);
-    }
-  }
-
-  @Override
-  public void deleteUserImage(String fileName) {
+  public void deleteFile(String fileName) {
     log.info("Deleting file {}", fileName);
     try {
       Path toDelete = getResourcePath(directoryProperties.users(), fileName);
-      Files.deleteIfExists(toDelete);
-    } catch (IOException e) {
-      log.error("Error when deleting image file {}", fileName);
-      throw new ImageUploadException("Image Upload Failed", e);
-    }
-  }
-
-  @Override
-  public void deleteFilmImage(String fileName) {
-    log.info("Deleting file {}", fileName);
-    try {
-      Path toDelete = getResourcePath(directoryProperties.films(), fileName);
       Files.deleteIfExists(toDelete);
     } catch (IOException e) {
       log.error("Error when deleting image file {}", fileName);

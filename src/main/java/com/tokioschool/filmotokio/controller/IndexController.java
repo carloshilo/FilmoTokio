@@ -3,6 +3,7 @@ package com.tokioschool.filmotokio.controller;
 import static com.tokioschool.filmotokio.utils.Constants.ADMIN_ROLE;
 
 import com.tokioschool.filmotokio.domain.dto.CreateUserDTO;
+import com.tokioschool.filmotokio.service.FilmService;
 import com.tokioschool.filmotokio.service.RoleService;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
@@ -20,12 +21,14 @@ import org.springframework.web.servlet.ModelAndView;
 public class IndexController {
 
   private final @NonNull RoleService roleService;
+  private final @NonNull FilmService filmService;
 
   @GetMapping()
   public ModelAndView index(ModelAndView modelAndView) {
 
     modelAndView.addObject("titulo", "tokiofilm");
     modelAndView.addObject("welcome", "Bienvenidos a FilmTokio");
+    modelAndView.addObject("films", filmService.getAll());
     modelAndView.setViewName("index");
     return modelAndView;
   }

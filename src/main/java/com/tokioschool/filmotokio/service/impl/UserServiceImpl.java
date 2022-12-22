@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
         user.setImage(fileName);
         userRepository.save(user);
 
-        fileService.saveUserImage(file, fileName);
+        fileService.saveFile(file, fileName);
     }
 
     @Override
