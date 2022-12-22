@@ -23,7 +23,7 @@ public class IndexController {
   private final @NonNull RoleService roleService;
   private final @NonNull FilmService filmService;
 
-  @GetMapping()
+  @GetMapping({"", "/index"})
   public ModelAndView index(ModelAndView modelAndView) {
 
     modelAndView.addObject("titulo", "tokiofilm");

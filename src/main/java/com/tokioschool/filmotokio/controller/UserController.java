@@ -53,7 +53,10 @@ public class UserController {
   public String signup(@ModelAttribute @Valid CreateUserDTO createUserDTO, BindingResult result,
       Model model,
       SessionStatus status) {
+
     if (result.hasErrors()) {
+      model.addAttribute("model", createUserDTO);
+      model.addAttribute("roles", roleService.findAll());
       return "signup";
     }
     userService.create(createUserDTO);
