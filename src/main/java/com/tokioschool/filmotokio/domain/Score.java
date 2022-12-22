@@ -33,7 +33,7 @@ public class Score implements Serializable {
   private long id;
   @NotNull
   @Column(nullable = false)
-  private String value;
+  private float value;
 
   @ManyToOne
   @JoinColumn(name = "user_id")

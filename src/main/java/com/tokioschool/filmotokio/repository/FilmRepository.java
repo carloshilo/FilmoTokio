@@ -21,11 +21,9 @@ public interface FilmRepository extends JpaRepository<Film, Long> {
 
     Set<Film> findByFilmActorsNameContainsOrFilmActorsSurnameContainsAllIgnoreCase(String name, String surname);
 
-    Set<Film> findByFilmCinematographersNameContainsOrFilmCinematographersSurnameContainsAllIgnoreCase(String name, String surname);
+    Set<Film> findByFilmPhototographersNameContainsOrFilmCinematographersSurnameContainsAllIgnoreCase(String name, String surname);
 
     Set<Film> findByFilmScreenwritersNameContainsOrFilmScreenwritersSurnameContainsAllIgnoreCase(String name, String surname);
-
-    Set<Film> findByFilmComposersNameContainsOrFilmComposersSurnameContainsAllIgnoreCase(String name, String surname);
 
     Set<Film> findByAvgScoreGreaterThanEqual(int score);
 

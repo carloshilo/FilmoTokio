@@ -38,7 +38,7 @@ public class FilmSearchImpl implements FilmSearch {
             case SCREENWRITER:
                 return new FilmScreenwriterSearch(repository).searchFilm(searchParam);
             case CINEMATOGRAPHER:
-                return new FilmCinematographerSearch(repository).searchFilm(searchParam);
+                return new FilmPhotographerSearch(repository).searchFilm(searchParam);
             case COMPOSER:
                 return new FilmComposerSearch(repository).searchFilm(searchParam);
         }
