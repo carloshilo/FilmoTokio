@@ -10,7 +10,7 @@
         <a class="nav-link" th:href="@{/person/add}" sec:authorize="isAuthenticated()">Add Person</a>
       </li>
       <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-        <a class="nav-link" th:href="@{register}">Create User</a>
+        <a class="nav-link" th:href="@{register}">Crear usuario</a>
       </li>
       <div class="d-grid gap-2 d-md-flex justify-content-md-end"
            id="Navbar Collapse">

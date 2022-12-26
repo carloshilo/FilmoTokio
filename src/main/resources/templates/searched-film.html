@@ -11,7 +11,7 @@
                 <div class="row" th:fragment="searched-film">
                     <div class="card m-2" style="width: 12rem;" th:each="film : ${films}">
                         <img alt="Póster de la película" class="card-img-top p-3"
-                             th:src="@{${'./static/images/peliculas/' + film.poster}}">
+                             th:src="@{${'images/peliculas/' + film.poster}}">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${film.title}"></h5> <h6 class="card-title"
                                                                                      th:text="'(' + *{film.year} + ')'"></h6>
