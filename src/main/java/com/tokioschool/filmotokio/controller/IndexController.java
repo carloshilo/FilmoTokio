@@ -8,7 +8,9 @@ import com.tokioschool.filmotokio.service.RoleService;
 import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,7 @@ public class IndexController {
   private final @NonNull FilmService filmService;
 
   @GetMapping({"", "/index"})
-  public ModelAndView index(ModelAndView modelAndView) {
+  public ModelAndView index(ModelAndView modelAndView, Authentication authentication) {
 
     modelAndView.addObject("titulo", "tokiofilm");
     modelAndView.addObject("welcome", "Bienvenidos a FilmTokio");

@@ -1,38 +1,40 @@
 <!doctype html>
-<html class="form-signin" lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html class="form-signin" lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head :: head"></head>
 
 <body class="form-signin text-center body-color">
 
 <main class="form-signin">
-    <form th:action="@{/login}" th:method="post">
-        <a href="/">
-            <img class="mb-4 rounded-circle" src="" th:src="@{/images/cinema.png}" alt="" height="100">
-        </a>
-        <h1 class="h3 mb-3 fw-normal" th:text="'Por favor, regístrate'"></h1>
+  <form th:action="@{/login}" th:method="post">
+    <a href="/">
+      <img alt="" class="mb-4 rounded-circle" height="100" src="" th:src="@{/images/cinema.png}">
+    </a>
+    <h1 class="h3 mb-3 fw-normal" th:text="'Por favor, regístrate'"></h1>
 
-        <div class="form-floating">
-            <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de usuario"
-                   required autofocus>
-            <label for="username" th:text="'Nombre de usuario'"></label>
-        </div>
-        <div class="form-floating">
-            <input type="password" class="form-control" name="password" id="password"
-                   placeholder="Contraseña" autofocus>
-            <label for="password" th:text="'Contraseña'"></label>
-        </div>
-        <div class="checkbox mb-2">
-            <label>
-                <input type="checkbox" value="remember-me" th:text="'Recuérdame'">
-            </label>
-        </div>
-        <button class="w-100 btn btn-lg btn-primary" type="submit" th:text="'Entrar'"></button>
+    <div class="form-floating">
+      <input autofocus class="form-control" id="username" name="username"
+             placeholder="Nombre de usuario"
+             required type="text">
+      <label for="username" th:text="'Nombre de usuario'"></label>
+    </div>
+    <div class="form-floating">
+      <input autofocus class="form-control" id="password" name="password"
+             placeholder="Contraseña" type="password">
+      <label for="password" th:text="'Contraseña'"></label>
+    </div>
+    <div class="checkbox mb-2">
+      <label>
+        <input th:text="'Recuérdame'" type="checkbox" value="remember-me">
+      </label>
+    </div>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <button class="w-100 btn btn-lg btn-primary" th:text="'Entrar'" type="submit"></button>
 
-        <br/><br/>
-        <div th:if="${param.error}" class="alert alert-danger" role="alert"
-             th:text="'Nombre de usuario o contraseña incorrectos.'">
-        </div>
-    </form>
+    <br/><br/>
+    <div class="alert alert-danger" role="alert" th:if="${param.error}"
+         th:text="'Nombre de usuario o contraseña incorrectos.'">
+    </div>
+  </form>
 </main>
 </body>
 </html>

@@ -1,7 +1,5 @@
 package com.tokioschool.filmotokio.security;
 
-import com.tokioschool.filmotokio.security.jwt.JwtEntryPoint;
-import com.tokioschool.filmotokio.security.jwt.JwtTokenFilter;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
@@ -24,8 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @AllArgsConstructor
 public class SecurityConfig {
 
-  private final @NonNull JwtEntryPoint jwtEntryPoint;
-  private final @NonNull JwtTokenFilter jwtTokenFilter;
+
+  private final @NonNull LoginSuccessHandler successHandler;
 
   @Bean
   public AuthenticationManager authManager(HttpSecurity http, PasswordEncoder passwordEncoder,
@@ -40,21 +37,20 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.cors().and().csrf().disable()
-        .authorizeRequests()
+    http.authorizeRequests()
         .antMatchers("/", "/index", "/users/signup").permitAll()
         .anyRequest().authenticated()
         .and()
-        .formLogin().permitAll()
+        .formLogin()
+        .successHandler(successHandler)
+        .loginPage("/login").permitAll()
         .and()
-        .logout().permitAll()
+        .logout()
+        .logoutSuccessUrl("/")
+        .permitAll()
         .and()
         .exceptionHandling()
-        .authenticationEntryPoint(jwtEntryPoint)
-        .and()
-        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-    http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        .accessDeniedPage("/error_403");
 
     return http.build();
   }
@@ -70,8 +66,7 @@ public class SecurityConfig {
         "/css/**",
         "/js/**",
         "/fonts/**",
-        "/webjars/**",
-        "/api/auth"
+        "/webjars/**"
     );
   }
 

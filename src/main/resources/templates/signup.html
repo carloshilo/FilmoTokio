@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head::head"></head>
 <body class="d-flex align-items-center justify-content-center min-vh-100 bg-primary">
 <main>
@@ -46,7 +47,8 @@
             </div>
             <div class="col d-flex flex-column justify-content-end">
               <label class="form-label" for="nameInput" th:text="'Nombre'"></label>
-              <input class="form-control" id="nameInput" th:field="*{name}" th:placeholder="'Nombre'"
+              <input class="form-control" id="nameInput" th:field="*{name}"
+                     th:placeholder="'Nombre'"
                      type="text">
               <div class="alert alert-warning mb-0 mt-1 py-1" th:errors="*{name}"
                    th:if="${#fields.hasErrors('name')}"></div>
@@ -76,7 +78,8 @@
           </div>
 
           <div class="mt-3 text-center">
-            <button class="btn btn-primary profile-button mx-2" th:text="'Registrarse'" type="submit">
+            <button class="btn btn-primary profile-button mx-2" th:text="'Registrarse'"
+                    type="submit">
               Confirm
             </button>
           </div>

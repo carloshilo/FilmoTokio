@@ -3,6 +3,7 @@ package com.tokioschool.filmotokio.controller;
 import com.tokioschool.filmotokio.domain.Person;
 import com.tokioschool.filmotokio.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class PersonController {
         this.service = service;
     }
 
+    @Secured({"ADMIN"})
     @GetMapping
     public String addPerson(@RequestParam(name = "person", required = false) String message,
                             ModelAndView modelAndView) {

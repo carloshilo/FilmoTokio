@@ -1,11 +1,11 @@
 package com.tokioschool.filmotokio.domain;
 
 import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,9 +25,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 /**
  * User application
@@ -39,7 +36,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @Entity(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-public class User implements UserDetails {
+public class User implements Serializable {
 
   @Serial
   private static final long serialVersionUID = 1382241345373591627L;
@@ -87,43 +84,18 @@ public class User implements UserDetails {
   @JoinColumn(name = "role_id")
   private Role role;
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.singleton(new SimpleGrantedAuthority(role.getName()));
-  }
-
   public void update(User user) {
-    if (user.getUsername() != null) {
+    if (Objects.nonNull(user.getUsername())) {
       this.username = user.getUsername();
     }
-    if (user.getEmail() != null) {
+    if (Objects.nonNull(user.getEmail())) {
       this.email = user.getEmail();
     }
-    if (user.getName() != null) {
+    if (Objects.nonNull(user.getName())) {
       this.name = user.getName();
     }
-    if (user.getSurname() != null) {
+    if (Objects.nonNull(user.getSurname())) {
       this.surname = user.getSurname();
     }
-  }
-
-  @Override
-  public boolean isAccountNonExpired() {
-    return true;
-  }
-
-  @Override
-  public boolean isAccountNonLocked() {
-    return true;
-  }
-
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return true;
-  }
-
-  @Override
-  public boolean isEnabled() {
-    return true;
   }
 }
