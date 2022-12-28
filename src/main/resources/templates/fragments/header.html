@@ -6,17 +6,30 @@
       <a class="navbar-brand" th:href="@{/}" th:text="'FilmTokio'"></a>
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
+          <a class="nav-link" aria-current="page" th:href="@{/} "th:text="'Inicio'"></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/search}" th:text="'Buscar películas'"></a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/films/add}"
-             th:text="'Add film'"></a>
+             th:text="'Añadir película'"></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/person/add}"
-             th:text="'Add person'"></a>
+             th:text="'Añadir persona'"></a>
         </li>
         <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-          <a class="nav-link" th:href="@{register}" th:text="'Add user'"></a>
+          <a class="nav-link" th:href="@{register}" th:text="'Añadir usuario'"></a>
         </li>
       </ul>
+      <form class="d-flex align-items-center" th:method="get" th:action="@{/films/search}">
+        <input class="form-control" type="text" name="query" id="query" placeholder="Buscar" aria-label="search">
+        <input type="hidden" name="criteria" id="criteria" value="title">
+        <button class="btn btn-outline-success mx-2" type="submit">
+          <i class="fas fa-search"></i>
+        </button>
+      </form>
       <ul class="navbar-nav navbar-right">
         <li sec:authorize="!isAuthenticated()">
           <a class="btn btn-outline-light" th:href="@{/login}" th:text="'Inicio sesión'"></a>
