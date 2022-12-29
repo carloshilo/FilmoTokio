@@ -16,6 +16,11 @@
   <description>Demo project for Spring Boot</description>
   <properties>
     <java.version>17</java.version>
+    <bootstrap.version>5.2.3</bootstrap.version>
+    <jquery.version>3.6.1</jquery.version>
+    <popper.version>2.9.3</popper.version>
+    <font-awesome.version>6.2.0</font-awesome.version>
+    <webjars-locator.version>0.46</webjars-locator.version>
   </properties>
   <dependencies>
     <dependency>
@@ -94,22 +99,31 @@
     <dependency>
       <groupId>org.webjars</groupId>
       <artifactId>bootstrap</artifactId>
-      <version>5.2.3</version>
+      <version>${bootstrap.version}</version>
     </dependency>
+
     <dependency>
-      <groupId>org.webjars.bower</groupId>
+      <groupId>org.webjars</groupId>
       <artifactId>jquery</artifactId>
-      <version>3.6.2</version>
+      <version>${jquery.version}</version>
     </dependency>
+
     <dependency>
-      <groupId>org.webjars.npm</groupId>
+      <groupId>org.webjars</groupId>
       <artifactId>popper.js</artifactId>
-      <version>1.16.1</version>
+      <version>${popper.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>font-awesome</artifactId>
+      <version>${font-awesome.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>org.webjars</groupId>
       <artifactId>webjars-locator</artifactId>
-      <version>0.46</version>
+      <version>${webjars-locator.version}</version>
     </dependency>
 
     <dependency>
