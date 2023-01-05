@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
-    List<Person> findByType(TypePerson type);
+    List<Person> findByTypeOrderByNameAsc(TypePerson type);
     List<Person> findByNameAndSurnameAllIgnoreCase(String name, String surname);
 }
 

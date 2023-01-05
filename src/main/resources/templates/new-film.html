@@ -12,12 +12,12 @@
                     <div class="row px-1 mt-1">
                         <div class="col">
                             <label for="title">Título</label>
-                            <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Title">
+                            <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="Título">
                         </div>
                         <div class="col-2">
                             <label for="year">Año</label>
                             <select class="form-select" th:field="*{year}" id="year">
-                                <option th:each="i : ${#numbers.sequence(1990, 2022)}" th:value="${i}" th:text="${i}">
+                                <option th:each="i : ${#numbers.sequence(1950, 2023)}" th:value="${i}" th:text="${i}">
                                     Year
                                 </option>
                             </select>
@@ -42,8 +42,8 @@
                     </div>
                     <div class="row px-1">
                         <div class="col py-1">
-                            <label for="actors">Director(es)</label>
-                            <select class="form-select" id="directors" multiple th:field="*{filmDirectors}">
+                            <label for="directors">Director(es)</label>
+                            <select class="form-select" id="directors" multiple="multiple" th:field="*{directors}">
                                 <option th:each="director: ${directors}" th:value="${director.id}"
                                         th:text="${director.name} + ' ' + ${director.surname}">
                                 </option>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="col py-1">
                             <label for="actors">Actor(es)</label>
-                            <select class="form-select" id="actors" multiple th:field="*{filmActors}">
+                            <select class="form-select" id="actors" multiple="multiple" th:field="*{actors}">
                                 <option th:each="actor: ${actors}" th:value="${actor.id}"
                                         th:text="${actor.name} + ' ' + ${actor.surname}">
                                 </option>
@@ -59,26 +59,34 @@
                         </div>
                         <div class="col px-1">
                             <label for="screenwriters">Guionista(s)</label>
-                            <select class="form-select" id="screenwriters" multiple th:field="*{filmScreenwriters}">
+                            <select class="form-select" id="screenwriters" multiple="multiple"
+                                    th:field="*{screenwriters}">
                                 <option th:each="screenwriter : ${screenwriters}" th:value="${screenwriter.id}"
                                         th:text="${screenwriter.name} + ' ' + ${screenwriter.surname}">
                                 </option>
                             </select>
                         </div>
                         <div class="col px-1">
+                            <label for="musicians">Música</label>
+                            <select class="form-select" id="musicians" multiple="multiple"
+                                    th:field="*{musicians}">
+                                <option th:each="musician : ${musicians}" th:value="${musician.id}"
+                                        th:text="${musician.name} + ' ' + ${musician.surname}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col px-1">
                             <label for="photographers">Fotografía</label>
-                            <select class="form-select" id="photographers" multiple
-                                    th:field="*{filmPhotographers}">
-                                <option th:each="photographer : ${photographer}" th:value="${photographer.id}"
+                            <select class="form-select" id="photographers" multiple="multiple"
+                                    th:field="*{photographers}">
+                                <option th:each="photographer : ${photographers}" th:value="${photographer.id}"
                                         th:text="${photographer.name} + ' ' + ${photographer.surname}">
                                 </option>
                             </select>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center my-1">
-                        <button class="btn btn-primary mx-1" type="submit" th:text="Añadir"></button>
-                        <button class="btn btn-secondary mx-1" onClick="window.location.reload();"
-                                th:text="Reset"></button>
+                        <button class="btn btn-primary mx-1" type="submit" th:text="'Añadir'"></button>
                     </div>
                 </form>
             </div>

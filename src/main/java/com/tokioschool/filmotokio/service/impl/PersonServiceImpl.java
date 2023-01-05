@@ -28,6 +28,6 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<Person> getPeopleByType(TypePerson type) {
         log.info("Fetching Person of PersonTypeEnum {}", type);
-        return personRepo.findByType(type);
+        return personRepo.findByTypeOrderByNameAsc(type);
     }
 }

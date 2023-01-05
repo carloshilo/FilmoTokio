@@ -12,4 +12,11 @@ public interface FilmService {
     Film getFilmByUri(String filmUri);
 
     Set<FilmDTO> getAll();
+    Set<Film> searchFilms(String searchParam, String searchCriteria);
+
+    Film addScore(String filmUri, Score score);
+
+    Film savePoster(Film film, MultipartFile posterImage);
+
+    Film addFilm(FilmDTO film, String username);
 }

@@ -46,6 +46,8 @@ public class Film implements Serializable {
   @NotNull
   @Column(nullable = false)
   private int year;
+  @Column
+  private String uri;
   @NotNull
   @Column(nullable = false)
   private int duration;
