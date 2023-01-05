@@ -1,0 +1,12 @@
+main {
+  padding: 2rem;
+}
+
+.img-profile {
+  border: 1px solid #227093;
+  max-width: 150px;
+}
+
+.bold {
+  font-weight: bold;
+}

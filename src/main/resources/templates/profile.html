@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head::head"></head>
+<body th:class="'d-flex flex-column min-vh-100 body-color'">
+<header th:replace="fragments/header :: header"></header>
+<main>
+  <div th:class="container">
+    <div th:class="'row'">
+      <div th:class="'col-2'">
+        <img th:class="'rounded-circle img-profile'"
+             th:if="${user.image != null}"
+             th:src="@{'/images/users/' + ${user.image}}"/>
+        <img th:class="'rounded-circle img-profile'"
+             th:src="@{'/images/default-profile.png'}"
+             th:unless="${user.image != null}"/>
+      </div>
+      <div th:class="'col'">
+        <div th:class="'row row-cols-1 g-2'">
+          <h3 th:class="'col'" th:text="${user.username}"></h3>
+          <div th:class="'col'">
+            <div th:class="'row row-cols-2 g-2'">
+              <div th:class="'col d-flex flex-column justify-content-end'">
+                <label th:class="'form-label bold'" th:for="name"
+                       th:text="'Nombre'"></label>
+                <input readonly th:class="'form-control form-control-plaintext'"
+                       th:id="name" th:name="name"
+                       th:type="text" th:value="${user.name}">
+              </div>
+              <div th:class="'col d-flex flex-column justify-content-end'">
+                <label th:class="'form-label bold'" th:for="surname"
+                       th:text="'Apellidos'"></label>
+                <input readonly th:class="'form-control form-control-plaintext'"
+                       th:id="surname" th:name="surname"
+                       th:type="text" th:value="${user.surname}">
+              </div>
+              <div th:class="'col d-flex flex-column justify-content-end'">
+                <label th:class="'form-label bold'" th:for="email"
+                       th:text="'Email'"></label>
+                <input readonly th:class="'form-control form-control-plaintext'"
+                       th:id="email" th:name="email"
+                       th:type="text" th:value="${user.email}">
+              </div>
+              <div th:class="'col d-flex flex-column justify-content-end'">
+                <label th:class="'form-label bold'" th:for="birthdate"
+                       th:text="'Fecha de nacimiento'"></label>
+                <input readonly th:class="'form-control form-control-plaintext'"
+                       th:id="birthdate" th:name="birthdate"
+                       th:type="text" th:value="${#dates.format(user.birthdate, 'dd MMMM yyyy')}">
+              </div>
+              <div th:class="'col d-flex flex-column justify-content-end'">
+                <label th:class="'form-label bold'" th:for="creationDate"
+                       th:text="'Unido en'"></label>
+                <input readonly th:class="'form-control form-control-plaintext'"
+                       th:id="creationDate" th:name="creationDate"
+                       th:type="text"
+                       th:value="${#temporals.format(user.creationDate, 'dd MMMM yyyy')}">
+              </div>
+              <div th:class="'col d-flex flex-column justify-content-end'">
+                <label th:class="'form-label bold'" th:for="lastLogin"
+                       th:text="'Último inicio de sesión'"></label>
+                <input readonly th:class="'form-control form-control-plaintext'"
+                       th:id="lastLogin" th:name="lastLogin"
+                       th:type="text"
+                       th:value="${#temporals.format(user.lastLogin, 'hh:mm z dd MMMM')}">
+              </div>
+            </div>
+          </div>
+          <div th:class="'col'"
+               th:if="${#authentication.getPrincipal().getUsername() == user.username}">
+            <a th:class="'btn btn-primary profile-button mx-1'" th:href="@{/profile/edit/}">Edit
+              Profile</a>
+          </div>
+        </div>
+      </div>
+      <div th:class="'col'">
+        <div th:class="'d-flex justify-content-between align-items-center mb-3'">
+          <h3 th:class="'text-right'">Films</h3>
+        </div>
+        <div th:class="'row mt-2'">
+          <ul>
+            <li th:class="'d-flex align-items-center mx-1'" th:each="film : ${user.films}">
+              <a th:class="'link'" th:href="@{'/film/' + ${film.title}}" title="${film.title}">
+                <img alt="Film Poster"
+                     height="120" id="Poster" src=""
+                     th:class="'responsive-image py-3 my-1'"
+                     th:src="@{'/images/films/' + ${film.poster}}">
+              </a>
+              <strong th:class="'mx-2'" th:src="@{'/film/' + film.id}"
+                      th:text="${film.title}"></strong>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+
+
+</html>

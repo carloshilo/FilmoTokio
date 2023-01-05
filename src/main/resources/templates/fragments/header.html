@@ -6,10 +6,7 @@
       <a class="navbar-brand" th:href="@{/}" th:text="'FilmTokio'"></a>
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link" aria-current="page" th:href="@{/} "th:text="'Inicio'"></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/search}" th:text="'Buscar películas'"></a>
+          <a class="nav-link" th:href="@{/} " th:text="'Inicio'"></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/films/add}"
@@ -23,10 +20,10 @@
           <a class="nav-link" th:href="@{/signup}" th:text="'Añadir usuario'"></a>
         </li>
       </ul>
-      <form class="d-flex align-items-center" th:method="get" th:action="@{/films/search}">
-        <input class="form-control" type="text" name="query" id="query" placeholder="Buscar" aria-label="search">
-        <input type="hidden" name="criteria" id="criteria" value="title">
-        <button class="btn btn-outline-success mx-2" type="submit">
+      <form class="d-flex align-items-center" th:action="@{/films/search}" th:method="get">
+        <input class="form-control" th:id="query" th:name="query" th:placeholder="'Buscar película'"
+               th:type="text">
+        <button class="btn btn-outline-success mx-2" th:type="submit">
           <i class="fas fa-search"></i>
         </button>
       </form>
@@ -38,12 +35,19 @@
           <a class="btn btn-outline-light" th:href="@{/users/signup} " th:text="'Registro'"></a>
         </li>
         <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-          <form th:action="@{/logout}" th:method="post">
-            <button class="btn btn-outline-light" th:text="'Cerrar sesión'"
-                    type="submit">
-            </button>
-            <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
-          </form>
+          <div class="btn-group dropstart">
+            <button aria-expanded="false" class="btn btn-outline-light dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    sec:authentication="name"
+                    th:type="button"></button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" th:href="@{/users/profile}" th:text="'Perfil'"></a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li><a class="dropdown-item" th:href="@{/logout}" th:text="'Cerrar sesión'"></a></li>
+            </ul>
+          </div>
         </li>
       </ul>
     </div>

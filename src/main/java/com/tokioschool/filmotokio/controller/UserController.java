@@ -8,6 +8,7 @@ import com.tokioschool.filmotokio.exception.UnauthorizedException;
 import com.tokioschool.filmotokio.service.RoleService;
 import com.tokioschool.filmotokio.service.UserService;
 import java.security.Principal;
+import java.util.Objects;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -65,23 +66,14 @@ public class UserController {
   }
 
   @GetMapping("/profile")
-  public String profile(ModelAndView modelAndView, Principal principal) {
-    if (principal != null) {
-      User user = userService.getByUsernameOrThrow(principal.getName());
-      modelAndView.addObject("user", user);
-      return "profile";
+  public String profile(Model model, Principal principal) {
+    if (Objects.nonNull(principal)) {
+      var user = userService.getByUsernameOrThrow(principal.getName());
+      model.addAttribute("user", user);
+      return "/profile";
     } else {
-      return "/";
+      return "redirect:/index";
     }
-  }
-
-  @GetMapping("admin/user/{username}")
-  public String profile(@PathVariable("username") String username,
-      @RequestParam(name = "user", required = false) String requestParam,
-      ModelAndView modelAndView) {
-    User user = userService.getByUsernameOrThrow(username);
-    modelAndView.addObject("user", user);
-    return "profile";
   }
 
   @GetMapping("/profile/{username}/films")
