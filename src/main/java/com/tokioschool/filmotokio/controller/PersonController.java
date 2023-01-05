@@ -5,9 +5,9 @@ import com.tokioschool.filmotokio.service.PersonService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -23,24 +23,22 @@ public class PersonController {
         this.service = service;
     }
 
-    @Secured({"ADMIN"})
-    @GetMapping
+    @GetMapping("/add")
     public String addPerson(@RequestParam(name = "person", required = false) String message,
-                            ModelAndView modelAndView) {
-        modelAndView.addObject("person", new Person());
+                            Model model) {
+        model.addAttribute("person", new Person());
         return "new-person";
     }
-    @PostMapping
-    public String addPerson(@ModelAttribute @Valid Person person,
+
+    @PostMapping("/add")
+    public String addPerson(@ModelAttribute("person") @Valid Person person,
                             BindingResult result,
-                            ModelAndView modelAndView,
-                            Principal principal)
-    {
+                            Model model,
+                            Principal principal) {
         if (result.hasErrors()) {
             log.error("Creation of Person {} failed because: {}", person, result.getAllErrors().toArray());
             return "new-person";
-        }
-        else {
+        } else {
             log.info("User {} added Person {}", principal.getName(), person);
             service.addPerson(person);
             return "redirect:/person/add?person=created";

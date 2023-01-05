@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @AllArgsConstructor
 public enum TypePerson {
-  SCREENWRITER("Screenwriter"),
-  MUSICIAN("Musician"),
-  PHOTOGRAPHER("Photographer"),
+  SCREENWRITER("Guionista"),
+  MUSICIAN("Música"),
+  PHOTOGRAPHER("Fotografía"),
   ACTOR("Actor"),
   DIRECTOR("Director");
 

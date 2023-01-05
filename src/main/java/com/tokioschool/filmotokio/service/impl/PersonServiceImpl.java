@@ -4,6 +4,7 @@ import com.tokioschool.filmotokio.domain.Person;
 import com.tokioschool.filmotokio.domain.enums.TypePerson;
 import com.tokioschool.filmotokio.repository.PersonRepository;
 import com.tokioschool.filmotokio.service.PersonService;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,21 +14,27 @@ import java.util.List;
 @Service
 public class PersonServiceImpl implements PersonService {
 
-    private final PersonRepository personRepo;
+    private final @NonNull PersonRepository personRepository;
 
-    public PersonServiceImpl(PersonRepository personRepo) {
-        this.personRepo = personRepo;
+    public PersonServiceImpl(@NonNull PersonRepository personRepository) {
+        this.personRepository = personRepository;
     }
 
     @Override
-    public Person addPerson(Person person) {
+    public Person addPerson(Person dto) {
+        Person person = Person.builder()
+                .name(dto.getName())
+                .surname(dto.getSurname())
+                .type(dto.getType())
+                .build();
+
         log.info("Adding Person: {}", person);
-        return personRepo.save(person);
+        return personRepository.save(person);
     }
 
     @Override
     public List<Person> getPeopleByType(TypePerson type) {
         log.info("Fetching Person of PersonTypeEnum {}", type);
-        return personRepo.findByTypeOrderByNameAsc(type);
+        return personRepository.findByTypeOrderByNameAsc(type);
     }
 }
