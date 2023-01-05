@@ -67,7 +67,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(CreateUserDTO userDTO) {
-        return null;
+        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+            throw new UsernameAlreadyExistsException("Username not available");
+        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        User user = User.builder()
+                .name(userDTO.getName())
+                .surname(userDTO.getSurname())
+                .username(userDTO.getUsername())
+                .password(encoder.encode(userDTO.getPassword()))
+                .email(userDTO.getEmail())
+                .birthdate(userDTO.getBirthDate())
+                .role(userDTO.getRole())
+                .build();
+
+        return userRepository.save(user);
     }
 
     @Override
