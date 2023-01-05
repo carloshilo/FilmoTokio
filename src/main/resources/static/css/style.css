@@ -7,6 +7,10 @@ main {
   max-width: 150px;
 }
 
+.film-profile {
+  width: 100px;
+}
+
 .bold {
   font-weight: bold;
 }

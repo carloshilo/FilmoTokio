@@ -6,7 +6,7 @@
 <header th:replace="fragments/header :: header"></header>
 <main>
   <div th:class="container">
-    <div th:class="'row'">
+    <div th:class="'row d-flex align-items-start'">
       <div th:class="'col-2'">
         <img th:class="'rounded-circle img-profile'"
              th:if="${user.image != null}"
@@ -66,30 +66,26 @@
               </div>
             </div>
           </div>
-          <div th:class="'col'"
+          <div th:class="'col d-flex justify-content-center'"
                th:if="${#authentication.getPrincipal().getUsername() == user.username}">
-            <a th:class="'btn btn-primary profile-button mx-1'" th:href="@{/profile/edit/}">Edit
-              Profile</a>
+            <a th:class="'btn btn-primary'" th:href="@{/users/profile/edit/}"
+               th:text="'Editar perfil'"></a>
           </div>
         </div>
       </div>
       <div th:class="'col'">
-        <div th:class="'d-flex justify-content-between align-items-center mb-3'">
-          <h3 th:class="'text-right'">Films</h3>
-        </div>
-        <div th:class="'row mt-2'">
-          <ul>
-            <li th:class="'d-flex align-items-center mx-1'" th:each="film : ${user.films}">
-              <a th:class="'link'" th:href="@{'/film/' + ${film.title}}" title="${film.title}">
-                <img alt="Film Poster"
-                     height="120" id="Poster" src=""
-                     th:class="'responsive-image py-3 my-1'"
-                     th:src="@{'/images/films/' + ${film.poster}}">
-              </a>
-              <strong th:class="'mx-2'" th:src="@{'/film/' + film.id}"
-                      th:text="${film.title}"></strong>
-            </li>
-          </ul>
+        <div th:class="'row row-cols-1 g-2'">
+          <h3 th:class="'col'" th:text="'Películas'"></h3>
+          <div th:class="'col card'">
+            <ul th:class="'list-group list-group-flush'">
+              <li th:class="'list-group-item row'" th:each="film : ${user.films}">
+
+                <img th:alt="'Póster de la película'" th:class="'col-2 img-fluid rounded-start'"
+                     th:src="@{${'/images/peliculas/' + film.poster}}">
+                <div th:class="'col-10 bold'" th:text="${film.title}"></div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
