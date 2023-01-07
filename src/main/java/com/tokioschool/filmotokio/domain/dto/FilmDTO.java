@@ -23,6 +23,7 @@ public class FilmDTO implements Serializable {
     private long id;
     private String title;
     private int year;
+    private String uri;
     private int duration;
     private String poster;
     private float avgScore;

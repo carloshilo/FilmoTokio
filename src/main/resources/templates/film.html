@@ -1,8 +1,6 @@
 <html lang="es" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/head::head"></head>
-<body>
-<header th:replace="fragments/header :: header"></header>
 <body class="d-flex flex-column min-vh-100 body-color">
 <header th:replace="fragments/header :: header"></header>
 
@@ -16,7 +14,7 @@
             <h4 class="card-subtitle mb-1" th:text="'(' + *{year} + ')'"></h4>
             <div class="row justify-content-between">
               <div class="col text-start">
-                <p class="fs-6 text-muted" th:text="'Director: ' + *{filmDirector}"></p>
+                <span th:each="director, iterator : ${directors}" th:text="!${iterator.last} ? ${director.name} + ',': ${director.name}"></span>
               </div>
               <div class="col text-end">
                 <p class="fs-6 text-muted" th:text="'(' + *{duration} + 'mins)'"></p>
@@ -58,20 +56,20 @@
           <div class="col black-border">
             <h5 class="display black-border-bottom">Actores</h5>
             <ul class="list-unstyled">
-              <li th:each="actor : *{filmActors}" th:text="${actor}"></li>
+              <li th:each="actor : *{actors}" th:text="${actor}"></li>
             </ul>
           </div>
           <div class="col black-border">
             <h5 class="display black-border-bottom">Guionistas</h5>
             <ul class="list-unstyled">
-              <li th:each="screenwriter : *{filmScreenwriters}" th:text="${screenwriter}"></li>
+              <li th:each="screenwriter : *{screenwriters}" th:text="${screenwriter}"></li>
             </ul>
           </div>
           <div class="col black-border">
             <h5 class="display black-border-bottom">Fotografía</h5>
             <ul class="list-unstyled">
-              <li th:each="cinematographer : *{filmCinematographers}"
-                  th:text="${cinematographer}"></li>
+              <li th:each="photographer : *{photographers}"
+                  th:text="${photographer}"></li>
             </ul>
           </div>
         </div>

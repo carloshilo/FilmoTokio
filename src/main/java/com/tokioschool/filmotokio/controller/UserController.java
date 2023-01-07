@@ -91,10 +91,10 @@ public class UserController {
   }
 
   @GetMapping("/profile/edit")
-  public String editProfile(ModelAndView modelAndView, Principal principal) {
+  public String editProfile(Model model, Principal principal) {
     User user = userService.getByUsernameOrThrow(principal.getName());
-    modelAndView.addObject("editUserDTO", new EditUserDTO(user));
-    modelAndView.addObject("changePasswordDTO", new ChangePasswordDTO());
+    model.addAttribute("editUserDTO", new EditUserDTO(user));
+    model.addAttribute("changePasswordDTO", new ChangePasswordDTO());
     return "edit-profile";
   }
 
