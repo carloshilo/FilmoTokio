@@ -7,7 +7,6 @@
     <div class="container my-2">
         <div class="row">
             <div class="container mx-auto py-2 rounded bg-white">
-                <form></form>
                 <form th:method="POST" th:object="${film}" enctype="multipart/form-data" th:href="@{films/add}">
                     <div class="row px-1 mt-1">
                         <div class="col">
@@ -43,7 +42,7 @@
                     <div class="row px-1">
                         <div class="col py-1">
                             <label for="directors">Director(es)</label>
-                            <select class="form-select" id="directors" multiple="multiple" th:field="*{directors}">
+                            <select class="form-select" id="directors" multiple th:field="*{directors}">
                                 <option th:each="director: ${directors}" th:value="${director.id}"
                                         th:text="${director.name} + ' ' + ${director.surname}">
                                 </option>
@@ -51,7 +50,7 @@
                         </div>
                         <div class="col py-1">
                             <label for="actors">Actor(es)</label>
-                            <select class="form-select" id="actors" multiple="multiple" th:field="*{actors}">
+                            <select class="form-select" id="actors" multiple th:field="*{actors}">
                                 <option th:each="actor: ${actors}" th:value="${actor.id}"
                                         th:text="${actor.name} + ' ' + ${actor.surname}">
                                 </option>
@@ -59,7 +58,7 @@
                         </div>
                         <div class="col px-1">
                             <label for="screenwriters">Guionista(s)</label>
-                            <select class="form-select" id="screenwriters" multiple="multiple"
+                            <select class="form-select" id="screenwriters" multiple
                                     th:field="*{screenwriters}">
                                 <option th:each="screenwriter : ${screenwriters}" th:value="${screenwriter.id}"
                                         th:text="${screenwriter.name} + ' ' + ${screenwriter.surname}">
@@ -68,7 +67,7 @@
                         </div>
                         <div class="col px-1">
                             <label for="musicians">Música</label>
-                            <select class="form-select" id="musicians" multiple="multiple"
+                            <select class="form-select" id="musicians" multiple
                                     th:field="*{musicians}">
                                 <option th:each="musician : ${musicians}" th:value="${musician.id}"
                                         th:text="${musician.name} + ' ' + ${musician.surname}">
@@ -77,7 +76,7 @@
                         </div>
                         <div class="col px-1">
                             <label for="photographers">Fotografía</label>
-                            <select class="form-select" id="photographers" multiple="multiple"
+                            <select class="form-select" id="photographers" multiple
                                     th:field="*{photographers}">
                                 <option th:each="photographer : ${photographers}" th:value="${photographer.id}"
                                         th:text="${photographer.name} + ' ' + ${photographer.surname}">
