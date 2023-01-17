@@ -13,6 +13,7 @@
     <div class="row container-fluid">
       <div class="col d-flex justify-content-center">
         <form th:action="@{/users/signup}" th:method="post" th:object="${model}">
+          <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
           <div class="row row-cols-2 g-2">
             <div class="col d-flex flex-column justify-content-end">
               <label class="form-label" for="usernameInput" th:text="'Nombre de usuario'"></label>

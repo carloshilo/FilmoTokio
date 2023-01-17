@@ -17,6 +17,7 @@
           </p>
           <form></form>
           <form class="text-center" th:method="GET" th:action="@{/users/delete}"}>
+            <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <button class="btn btn-danger profile-button mx-2" type="submit">Eliminar perfil</button>
             <a href="#" class="alert-link mx-4" onclick="history.back()">Volver atrás</a>
           </form>

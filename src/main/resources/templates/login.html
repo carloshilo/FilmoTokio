@@ -6,6 +6,7 @@
 
 <main class="form-signin">
   <form th:action="@{/login}" th:method="post">
+    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     <a href="/">
       <img alt="" class="mb-4 rounded-circle" height="100" src="" th:src="@{/images/cinema.png}">
     </a>

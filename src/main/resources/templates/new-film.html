@@ -8,6 +8,7 @@
         <div class="row">
             <div class="container mx-auto py-2 rounded bg-white">
                 <form th:method="POST" th:object="${film}" enctype="multipart/form-data" th:href="@{films/add}">
+                    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     <div class="row px-1 mt-1">
                         <div class="col">
                             <label for="title">Título</label>
