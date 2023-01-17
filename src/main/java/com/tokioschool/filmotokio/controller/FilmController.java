@@ -62,16 +62,21 @@ public class FilmController {
                            Authentication authentication) {
         Film film = filmService.getFilmByUri(filmUri);
         var directors = film.getPeople().stream().filter(person -> person.getType().equals(DIRECTOR))
-                .collect(Collectors.toList());
+                .toList();
         var actors = film.getPeople().stream().filter(person -> person.getType().equals(ACTOR))
-                .collect(Collectors.toList());
+                .toList();
         var screenwriters = film.getPeople().stream().filter(person -> person.getType().equals(SCREENWRITER))
-                .collect(Collectors.toList());
+                .toList();
         var photographers = film.getPeople().stream().filter(person -> person.getType().equals(PHOTOGRAPHER))
-                .collect(Collectors.toList());
+                .toList();
         var musicians = film.getPeople().stream().filter(person -> person.getType().equals(MUSICIAN))
-                .collect(Collectors.toList());
+                .toList();
         model.addAttribute("film", film);
+        model.addAttribute("directors", directors);
+        model.addAttribute("actors", actors);
+        model.addAttribute("screenwriters", screenwriters);
+        model.addAttribute("photographers", photographers);
+        model.addAttribute("musicians", musicians);
 
         if (authentication != null) {
             var user =  userService.getByUsernameOrThrow(authentication.getName());
