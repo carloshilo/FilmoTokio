@@ -23,6 +23,7 @@ import java.security.Principal;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.tokioschool.filmotokio.domain.enums.TypePerson.*;
 
@@ -60,6 +61,16 @@ public class FilmController {
                            Model model,
                            Authentication authentication) {
         Film film = filmService.getFilmByUri(filmUri);
+        var directors = film.getPeople().stream().filter(person -> person.getType().equals(DIRECTOR))
+                .collect(Collectors.toList());
+        var actors = film.getPeople().stream().filter(person -> person.getType().equals(ACTOR))
+                .collect(Collectors.toList());
+        var screenwriters = film.getPeople().stream().filter(person -> person.getType().equals(SCREENWRITER))
+                .collect(Collectors.toList());
+        var photographers = film.getPeople().stream().filter(person -> person.getType().equals(PHOTOGRAPHER))
+                .collect(Collectors.toList());
+        var musicians = film.getPeople().stream().filter(person -> person.getType().equals(MUSICIAN))
+                .collect(Collectors.toList());
         model.addAttribute("film", film);
 
         if (authentication != null) {
