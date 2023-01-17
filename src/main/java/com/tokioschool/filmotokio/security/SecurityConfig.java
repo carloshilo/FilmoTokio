@@ -45,6 +45,7 @@ public class SecurityConfig {
         .loginPage("/login").permitAll()
         .and()
         .logout()
+        .logoutUrl("/logout")
         .logoutSuccessUrl("/")
         .permitAll()
         .and()
