@@ -83,7 +83,7 @@ public class UserController {
     return "searched-film";
   }
 
-  @PostMapping("/user/image")
+  @PostMapping("/image")
   public String userImage(@RequestParam("userImage") MultipartFile imageFile, Principal principal) {
     log.info("Saving User {} userImage", principal.getName());
     userService.saveImage(principal.getName(), imageFile);
@@ -98,7 +98,7 @@ public class UserController {
     return "edit-profile";
   }
 
-  @PostMapping("/user/edit")
+  @PostMapping("/edit")
   public String updateUser(@Valid @ModelAttribute("editUserDTO") EditUserDTO editUserDTO,
       BindingResult result,
       ModelAndView modelAndView,
@@ -115,7 +115,7 @@ public class UserController {
     }
   }
 
-  @PostMapping("/user/change-password")
+  @PostMapping("/change-password")
   public String changePassword(
       @Valid @ModelAttribute("changePasswordDTO") ChangePasswordDTO changePassword,
       BindingResult result,
@@ -137,7 +137,7 @@ public class UserController {
     return "delete-user";
   }
 
-  @GetMapping("/user/delete")
+  @GetMapping("/delete")
   public String deleteUser(Principal principal) throws UnauthorizedException {
     log.info("Deleting User {}", principal.getName());
     userService.deleteUser(principal.getName());
