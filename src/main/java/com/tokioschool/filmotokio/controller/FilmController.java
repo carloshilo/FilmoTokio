@@ -63,10 +63,10 @@ public class FilmController {
         model.addAttribute("film", film);
 
         if (authentication != null) {
-            User authenticatedUser = (User) authentication.getPrincipal();
+            var user =  userService.getByUsernameOrThrow(authentication.getName());
             Optional<Score> userScore = film.getScores()
                     .stream()
-                    .filter(scr -> Objects.equals(scr.getUser().getId(), authenticatedUser.getId()))
+                    .filter(scr -> Objects.equals(scr.getUser().getId(), user.getId()))
                     .findFirst();
             if (userScore.isPresent()) {
                 model.addAttribute("score", userScore.get());

@@ -24,9 +24,7 @@ public class StringUtil {
     }
 
     public static String getFilmTitleFromUri(String filmUri) {
-        String lowerCaseTitle = filmUri.substring(0, filmUri.length() - 5)
+        return filmUri.substring(0, filmUri.length() - 4)
                 .replace("-", " ");
-        return StringUtils.capitalize(lowerCaseTitle);
-
     }
 }

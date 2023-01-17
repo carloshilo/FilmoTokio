@@ -1,7 +1,6 @@
 package com.tokioschool.filmotokio.service.impl;
 
 import com.tokioschool.filmotokio.exception.ImageUploadException;
-import com.tokioschool.filmotokio.properties.FileDirectoryProperties;
 import com.tokioschool.filmotokio.service.FileService;
 import java.io.File;
 import java.io.IOException;
@@ -23,15 +22,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileServiceImpl implements FileService {
 
-  private final @NonNull FileDirectoryProperties directoryProperties;
 
   private final @NonNull ResourceLoader resourceLoader;
 
   @Override
-  public void saveFile(MultipartFile file, String fileName) throws ImageUploadException {
+  public void saveFile(MultipartFile file, String directory, String fileName)
+      throws ImageUploadException {
     log.info("Saving file {} as {}", file, fileName);
     try (InputStream fileStream = file.getInputStream()) {
-      Path imagePath = getResourcePath(directoryProperties.users(), fileName);
+      Path imagePath = getResourcePath(directory, fileName);
       if (Files.exists(imagePath)) {
         Files.copy(fileStream, imagePath, StandardCopyOption.REPLACE_EXISTING);
       } else {
@@ -45,10 +44,10 @@ public class FileServiceImpl implements FileService {
   }
 
   @Override
-  public void deleteFile(String fileName) {
+  public void deleteFile(String directory, String fileName) {
     log.info("Deleting file {}", fileName);
     try {
-      Path toDelete = getResourcePath(directoryProperties.users(), fileName);
+      Path toDelete = getResourcePath(directory, fileName);
       Files.deleteIfExists(toDelete);
     } catch (IOException e) {
       log.error("Error when deleting image file {}", fileName);

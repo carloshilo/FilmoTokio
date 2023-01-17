@@ -53,8 +53,7 @@ public class Film implements Serializable {
   private int duration;
   @Column
   private String synopsis;
-  @NotNull
-  @Column(nullable = false)
+  @Column
   private String poster;
   @NotNull
   @Column(nullable = false)

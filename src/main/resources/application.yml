@@ -16,7 +16,15 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   messages:
     basename: lang\res
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 jwt:
   secret: tokioschool
   expiration: 43200
+files:
+  directory:
+    films: static/images/peliculas
+    users: static/images/usuarios
