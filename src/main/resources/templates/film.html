@@ -15,7 +15,7 @@
             <h4 class="card-subtitle mb-1" th:text="'(' + *{year} + ')'"></h4>
             <div class="row justify-content-between">
               <div class="col text-start">
-                <span th:each="director, iterator : ${directors}" th:text="!${iterator.last} ? ${director.name} + ',': ${director.name}"></span>
+                <span th:each="director, iterator : ${directors}" th:text="!${iterator.last} ? ${director.name + ' ' + director.surname} + ',': ${director.name + ' ' + director.surname}"></span>
               </div>
               <div class="col text-end">
                 <p class="fs-6 text-muted" th:text="'(' + *{duration} + 'mins)'"></p>
@@ -50,27 +50,27 @@
           </div>
           <div class="d-flex col justify-content-center">
             <img alt="Film Poster" class="responsive-image py-3 my-1 mx-1"
-                 height="400px" id="Poster" src="" th:src="@{'/images/films/' + *{poster}}">
+                 height="400px" id="Poster" src="" th:src="@{'/images/peliculas/' + *{poster}}">
           </div>
         </div>
         <div class="row mx-1 p-2">
           <div class="col black-border">
             <h5 class="display black-border-bottom">Actores</h5>
             <ul class="list-unstyled">
-              <li th:each="actor : *{actors}" th:text="${actor}"></li>
+              <li th:each="actor : *{actors}" th:text="${actor.name + ' ' + actor.surname}"></li>
             </ul>
           </div>
           <div class="col black-border">
             <h5 class="display black-border-bottom">Guionistas</h5>
             <ul class="list-unstyled">
-              <li th:each="screenwriter : *{screenwriters}" th:text="${screenwriter}"></li>
+              <li th:each="screenwriter : *{screenwriters}" th:text="${screenwriter.name + ' ' + screenwriter.surname}"></li>
             </ul>
           </div>
           <div class="col black-border">
             <h5 class="display black-border-bottom">Fotografía</h5>
             <ul class="list-unstyled">
               <li th:each="photographer : *{photographers}"
-                  th:text="${photographer}"></li>
+                  th:text="${photographer.name + ' ' + photographer.surname}"></li>
             </ul>
           </div>
         </div>

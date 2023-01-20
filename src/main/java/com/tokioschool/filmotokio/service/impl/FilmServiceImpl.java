@@ -12,9 +12,9 @@ import com.tokioschool.filmotokio.service.UserService;
 import com.tokioschool.filmotokio.utils.StringUtil;
 import java.util.Collection;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -33,32 +33,25 @@ public class FilmServiceImpl implements FilmService {
   private final @NonNull FileDirectoryProperties directoryProperties;
 
   @Override
-  @Transactional()
-  public Film getFilmByUri(String filmUri) {
-    String filmTitle = StringUtil.getFilmTitleFromUri(filmUri);
-    return filmRepository.findByTitleIgnoreCase(filmTitle)
+  public Film getByUri(UUID uri) {
+    return filmRepository.findByUri(uri)
         .orElseThrow(FilmNotFoundException::new);
   }
 
   @Override
   public Set<FilmDTO> getAll() {
     return filmRepository.findAll().stream()
-        .map(film -> FilmDTO.builder()
-            .id(film.getId())
-            .year(film.getYear())
-            .title(film.getTitle())
-            .poster(film.getPoster())
-            .avgScore(film.getAvgScore())
-            .build()).collect(Collectors.toSet());
+        .map(FilmDTO::new)
+        .collect(Collectors.toSet());
   }
 
   @Override
-  public Set<Film> searchFilms(String searchParam, String searchCriteria) {
+  public Set<Film> findAllBy(String searchParam, String searchCriteria) {
     return null;
   }
 
   @Override
-  public Film addScore(String filmUri, Score score) {
+  public Film addScore(UUID filmUri, Score score) {
     return null;
   }
 
@@ -67,7 +60,7 @@ public class FilmServiceImpl implements FilmService {
     Film toUpdate = filmRepository.findByTitleIgnoreCase(film.getTitle())
         .orElseThrow(FilmNotFoundException::new);
 
-    String fileName = StringUtil.getFilmPosterFilename(film.getTitle(), film.getYear(),
+    String fileName = StringUtil.getFilmPosterFilename(film.getUri(),
         posterImage.getContentType());
     fileService.saveFile(posterImage, directoryProperties.films(), fileName);
 
@@ -76,7 +69,7 @@ public class FilmServiceImpl implements FilmService {
   }
 
   @Override
-  public Film addFilm(FilmDTO dto, String username) {
+  public Film add(FilmDTO dto, String username) {
     Film film = Film.builder()
         .people(Stream.of(dto.getActors(), dto.getDirectors(), dto.getMusicians(),
                 dto.getPhotographers(), dto.getScreenwriters())
@@ -87,9 +80,9 @@ public class FilmServiceImpl implements FilmService {
         .title(dto.getTitle())
         .poster(dto.getPoster())
         .synopsis(dto.getSynopsis())
+        .uri(UUID.randomUUID())
         .build();
     film.setUser(userService.getByUsernameOrThrow(username));
-    film.setUri(StringUtil.getFilmUri(film.getTitle(), film.getYear()));
     log.info("Saving Film {}", film);
     return filmRepository.save(film);
   }

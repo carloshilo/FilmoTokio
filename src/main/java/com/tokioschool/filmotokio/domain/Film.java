@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,6 +23,7 @@ import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 /**
  * Una película
@@ -46,8 +48,9 @@ public class Film implements Serializable {
   @NotNull
   @Column(nullable = false)
   private int year;
-  @Column
-  private String uri;
+
+  @Type(type = "uuid-char")
+  private UUID uri;
   @NotNull
   @Column(nullable = false)
   private int duration;
