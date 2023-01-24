@@ -89,4 +89,9 @@ public class FilmServiceImpl implements FilmService {
         log.info("Saving Film {}", film);
         return filmRepository.save(film);
     }
+
+    @Override
+    public Film findByTitleExact(String title) {
+        return filmRepository.findByTitleIgnoreCase(title).orElseThrow(FilmNotFoundException::new);
+    }
 }
