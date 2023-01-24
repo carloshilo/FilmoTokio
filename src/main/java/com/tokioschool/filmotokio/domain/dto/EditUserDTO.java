@@ -1,6 +1,8 @@
 package com.tokioschool.filmotokio.domain.dto;
 
 import com.tokioschool.filmotokio.domain.User;
+import java.io.Serial;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,8 +13,10 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EditUserDTO {
+public class EditUserDTO implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = -3048450963521058161L;
     @NotBlank(message = "{field.mandatory}")
     private String username;
     @Size(min = 2, message = "{field.name.length}")
