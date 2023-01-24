@@ -45,8 +45,8 @@ public class FilmServiceImpl implements FilmService {
   }
 
   @Override
-  public Set<Film> findAllBy(String searchParam, String searchCriteria) {
-    return null;
+  public Set<Film> findAllBy(String title) {
+    return filmRepository.findByTitleContainsIgnoreCase(title);
   }
 
   @Override

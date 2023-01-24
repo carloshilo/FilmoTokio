@@ -13,7 +13,7 @@ public interface FilmService {
     Film getByUri(UUID uri);
 
     Set<FilmDTO> getAll();
-    Set<Film> findAllBy(String searchParam, String searchCriteria);
+    Set<Film> findAllBy(String searchParam);
     Film savePoster(Film film, MultipartFile posterImage);
 
     Film add(FilmDTO film, String username);

@@ -48,9 +48,8 @@ public class FilmController {
 
   @GetMapping("/search")
   public String searchFilm(@RequestParam(name = "query") String query,
-      @RequestParam(name = "criteria") String criteria,
       Model model) {
-    Set<Film> results = filmService.findAllBy(query, criteria);
+    Set<Film> results = filmService.findAllBy(query);
     model.addAttribute("films", results);
     return "searched-film";
   }

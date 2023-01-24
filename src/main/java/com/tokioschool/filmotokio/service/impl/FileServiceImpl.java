@@ -40,18 +40,6 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    @Override
-    public void deleteFile(String directory, String fileName) {
-        log.info("Deleting file {}", fileName);
-        try {
-            Path toDelete = getResourcePath(directory, fileName);
-            Files.deleteIfExists(toDelete);
-        } catch (IOException e) {
-            log.error("Error when deleting image file {}", fileName);
-            throw new ImageUploadException("Image Upload Failed", e);
-        }
-    }
-
     private Path getRootResourcePath() throws IOException {
         return Paths.get(resourceLoader.getResource("classpath:").getURI());
     }
