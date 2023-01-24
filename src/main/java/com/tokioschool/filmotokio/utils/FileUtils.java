@@ -1,5 +1,6 @@
 package com.tokioschool.filmotokio.utils;
 
+import lombok.AllArgsConstructor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 

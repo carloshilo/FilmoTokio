@@ -35,7 +35,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 
   private final @NonNull RoleService roleService;
-
   private final @NonNull UserService userService;
 
   @GetMapping("/login")
@@ -50,7 +49,7 @@ public class UserController {
     return "signup";
   }
 
-  @PostMapping(value = "/signup")
+  @PostMapping("/signup")
   public String signup(@ModelAttribute @Valid CreateUserDTO createUserDTO, BindingResult result,
       Model model,
       SessionStatus status) {
@@ -76,7 +75,7 @@ public class UserController {
     }
   }
 
-  @GetMapping("/profile/{username}/films")
+  @GetMapping("/profile/films/{username}")
   public String userFilms(ModelAndView modelAndView, @PathVariable("username") String username) {
     User user = userService.getByUsernameOrThrow(username);
     modelAndView.addObject("films", user.getFilms());
@@ -109,7 +108,7 @@ public class UserController {
     } else {
       String loggedInUsername = principal.getName();
       log.info("Updating {} to {}", loggedInUsername, editUserDTO);
-      User updated = userService.updateUser(loggedInUsername, editUserDTO.map());
+      User updated = userService.update(loggedInUsername, editUserDTO.map());
       modelAndView.addObject("user", updated);
       return "redirect:/profile/";
     }
@@ -140,7 +139,7 @@ public class UserController {
   @GetMapping("/delete")
   public String deleteUser(Principal principal) throws UnauthorizedException {
     log.info("Deleting User {}", principal.getName());
-    userService.deleteUser(principal.getName());
+    userService.delete(principal.getName());
     return "redirect:/logout";
   }
 }

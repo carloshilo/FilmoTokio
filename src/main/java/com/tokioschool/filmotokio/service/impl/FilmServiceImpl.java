@@ -1,7 +1,6 @@
 package com.tokioschool.filmotokio.service.impl;
 
 import com.tokioschool.filmotokio.domain.Film;
-import com.tokioschool.filmotokio.domain.Score;
 import com.tokioschool.filmotokio.domain.dto.FilmDTO;
 import com.tokioschool.filmotokio.exception.FilmNotFoundException;
 import com.tokioschool.filmotokio.properties.FileDirectoryProperties;
@@ -46,51 +45,39 @@ public class FilmServiceImpl implements FilmService {
   }
 
   @Override
-  public Set<Film> findAllBy(String searchParam, String searchCriteria) {
-    return null;
-  }
-
-  @Override
-  public Film addScore(UUID filmUri, Score score) {
-    Film toUpdate = getByUri(filmUri);
-    toUpdate.getScores().add(score);
-    return filmRepository.save(toUpdate);
+  public Set<Film> findAllBy(String title) {
+    return filmRepository.findByTitleContainsIgnoreCase(title);
   }
 
   @Override
   public Film savePoster(Film film, MultipartFile posterImage) {
-    Film toUpdate = filmRepository.findByTitleIgnoreCase(film.getTitle())
-        .orElseThrow(FilmNotFoundException::new);
 
-    String fileName = StringUtil.getFilmPosterFilename(film.getUri(),
+    var fileName = StringUtil.getFilmPosterFilename(film.getUri(),
         posterImage.getContentType());
-    fileService.saveFile(posterImage, directoryProperties.films(), fileName);
+    fileService.save(posterImage, directoryProperties.films(), fileName);
 
+    var toUpdate = filmRepository.findByUri(film.getUri())
+        .orElseThrow(FilmNotFoundException::new);
     toUpdate.setPoster(fileName);
     return filmRepository.save(toUpdate);
   }
 
-    @Override
-    public Film add(FilmDTO dto, String username) {
-        Film film = Film.builder()
-                .people(Stream.of(dto.getActors(), dto.getDirectors(), dto.getMusicians(),
-                                dto.getPhotographers(), dto.getScreenwriters())
-                        .flatMap(Collection::stream)
-                        .collect(Collectors.toSet()))
-                .duration(dto.getDuration())
-                .year(dto.getYear())
-                .title(dto.getTitle())
-                .poster(dto.getPoster())
-                .synopsis(dto.getSynopsis())
-                .uri(UUID.randomUUID())
-                .build();
-        film.setUser(userService.getByUsernameOrThrow(username));
-        log.info("Saving Film {}", film);
-        return filmRepository.save(film);
-    }
-
-    @Override
-    public Film findByTitleExact(String title) {
-        return filmRepository.findByTitleIgnoreCase(title).orElseThrow(FilmNotFoundException::new);
-    }
+  @Override
+  public Film add(FilmDTO dto, String username) {
+    var film = Film.builder()
+        .people(Stream.of(dto.getActors(), dto.getDirectors(), dto.getMusicians(),
+                dto.getPhotographers(), dto.getScreenwriters())
+            .flatMap(Collection::stream)
+            .collect(Collectors.toSet()))
+        .duration(dto.getDuration())
+        .year(dto.getYear())
+        .title(dto.getTitle())
+        .poster(dto.getPoster())
+        .synopsis(dto.getSynopsis())
+        .uri(UUID.randomUUID())
+        .user(userService.getByUsernameOrThrow(username))
+        .build();
+    log.info("Saving Film {}", film);
+    return filmRepository.save(film);
+  }
 }

@@ -9,7 +9,6 @@ import static com.tokioschool.filmotokio.domain.enums.TypePerson.SCREENWRITER;
 import com.tokioschool.filmotokio.domain.Film;
 import com.tokioschool.filmotokio.domain.Score;
 import com.tokioschool.filmotokio.domain.dto.FilmDTO;
-import com.tokioschool.filmotokio.domain.enums.FilmSearchCriteria;
 import com.tokioschool.filmotokio.service.FilmService;
 import com.tokioschool.filmotokio.service.PersonService;
 import com.tokioschool.filmotokio.service.ReviewService;
@@ -31,11 +30,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-@Controller
 @Slf4j
+@Controller
+@RequestMapping("/films")
 @AllArgsConstructor
 public class FilmController {
 
@@ -45,22 +46,15 @@ public class FilmController {
   private final @NonNull ReviewService reviewService;
   private final @NonNull ScoreService scoreService;
 
-  @GetMapping("films/search")
+  @GetMapping("/search")
   public String searchFilm(@RequestParam(name = "query") String query,
-      @RequestParam(name = "criteria") String criteria,
       Model model) {
-    Set<Film> results = filmService.findAllBy(query, criteria);
+    Set<Film> results = filmService.findAllBy(query);
     model.addAttribute("films", results);
     return "searched-film";
   }
 
-  @GetMapping("search")
-  public String search(Model model) {
-    model.addAttribute("criteria", FilmSearchCriteria.values());
-    return "search-film";
-  }
-
-  @GetMapping("films/{filmUri}")
+  @GetMapping("/{filmUri}")
   public String filmInfo(@PathVariable("filmUri") UUID uri,
       Model model,
       Authentication authentication) {
@@ -83,7 +77,7 @@ public class FilmController {
     return "film";
   }
 
-  @PostMapping("films/{filmUri}/score")
+  @PostMapping("/score/{filmUri}")
   public String filmInfo(@PathVariable("filmUri") UUID filmUri,
       @ModelAttribute("newScore") @Valid Score score,
       BindingResult result,
@@ -99,18 +93,18 @@ public class FilmController {
     return "redirect:/films/" + filmUri;
   }
 
-  @GetMapping("films/add")
+  @GetMapping("/add")
   public String createFilm(Model model) {
     model.addAttribute("film", new FilmDTO());
-    model.addAttribute("directors", personService.getPeopleByType(DIRECTOR));
-    model.addAttribute("actors", personService.getPeopleByType(ACTOR));
-    model.addAttribute("screenwriters", personService.getPeopleByType(SCREENWRITER));
-    model.addAttribute("photographers", personService.getPeopleByType(PHOTOGRAPHER));
-    model.addAttribute("musicians", personService.getPeopleByType(MUSICIAN));
+    model.addAttribute("directors", personService.getByType(DIRECTOR));
+    model.addAttribute("actors", personService.getByType(ACTOR));
+    model.addAttribute("screenwriters", personService.getByType(SCREENWRITER));
+    model.addAttribute("photographers", personService.getByType(PHOTOGRAPHER));
+    model.addAttribute("musicians", personService.getByType(MUSICIAN));
     return "new-film";
   }
 
-  @PostMapping("films/add")
+  @PostMapping("/add")
   public String createFilm(@RequestParam("posterImage") MultipartFile posterImage,
       @ModelAttribute("film") @Valid FilmDTO film,
       BindingResult result,

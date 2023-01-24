@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface PersonService {
 
-    Person addPerson(Person person);
+    Person add(Person person);
 
-    List<Person> getPeopleByType(TypePerson type);
+    List<Person> getByType(TypePerson type);
 }

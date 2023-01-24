@@ -10,8 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-  Set<Review> findByFilmTitle(String title);
-
   @Query("SELECT r FROM reviews r JOIN FETCH r.user u WHERE u.username = ?1")
   Set<Review> findByUserUsername(String username);
 

@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Controller
 @Slf4j
+@Controller
 @RequestMapping("/person")
 @AllArgsConstructor
 public class PersonController {
@@ -43,7 +43,7 @@ public class PersonController {
       return "new-person";
     } else {
       log.info("User {} added Person {}", principal.getName(), person);
-      service.addPerson(person);
+      service.add(person);
       return "redirect:/person/add?person=created";
     }
   }

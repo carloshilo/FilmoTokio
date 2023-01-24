@@ -10,58 +10,56 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
-@AllArgsConstructor
+@Slf4j
 @Controller
 @RequestMapping("")
+@AllArgsConstructor
 public class IndexController {
 
   private final @NonNull RoleService roleService;
   private final @NonNull FilmService filmService;
 
   @GetMapping({"", "/index"})
-  public ModelAndView index(ModelAndView modelAndView, Authentication authentication) {
-
-    modelAndView.addObject("titulo", "tokiofilm");
-    modelAndView.addObject("welcome", "Bienvenidos a FilmTokio");
-    modelAndView.addObject("films", filmService.getAll());
-    modelAndView.setViewName("index");
-    return modelAndView;
+  public String index(Model model, Authentication authentication) {
+    model.addAttribute("titulo", "tokiofilm");
+    model.addAttribute("welcome", "Bienvenidos a FilmTokio");
+    model.addAttribute("films", filmService.getAll());
+    return "index";
   }
 
   @GetMapping("/login")
-  public ModelAndView login(ModelAndView modelAndView) {
-    modelAndView.setViewName("login");
-    return modelAndView;
+  public String login(Model model) {
+    return "login";
   }
 
-  @GetMapping( "/logout")
+  @GetMapping("/logout")
   public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
-    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    if (auth != null) {
+    var auth = SecurityContextHolder.getContext().getAuthentication();
+    if (Objects.nonNull(auth)) {
       new SecurityContextLogoutHandler().logout(request, response, auth);
     }
     return "redirect:/index";
   }
 
   @GetMapping("/signup")
-  public ModelAndView registerUser(ModelAndView modelAndView) {
-    modelAndView.addObject("model", new CreateUserDTO());
+  public String registerUser(Model model) {
+    model.addAttribute("model", new CreateUserDTO());
     var authorization = SecurityContextHolder.getContext().getAuthentication();
     if (Objects.nonNull(authorization) && authorization.getAuthorities().stream()
         .map(GrantedAuthority::getAuthority)
         .anyMatch(ADMIN_ROLE::equalsIgnoreCase)) {
-      modelAndView.addObject("roles", roleService.findAll());
+      model.addAttribute("roles", roleService.findAll());
     }
-    modelAndView.setViewName("signup");
-    return modelAndView;
+    return "signup";
   }
 }
