@@ -7,4 +7,5 @@ public interface ReviewService {
 
   List<Review> getAllByFilm(long id);
 
+  Review addReview(Review review);
 }

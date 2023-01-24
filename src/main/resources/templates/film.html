@@ -15,14 +15,11 @@
             <h4 class="card-subtitle mb-1" th:text="'(' + *{year} + ')'"></h4>
             <div class="row justify-content-between">
               <div class="col text-start">
-                <span th:each="director, iterator : ${directors}" th:text="!${iterator.last} ? ${director.name + ' ' + director.surname} + ',': ${director.name + ' ' + director.surname}"></span>
-              </div>
-              <div class="col text-end">
                 <p class="fs-6 text-muted" th:text="'(' + *{duration} + 'mins)'"></p>
               </div>
             </div>
-            <h4 class="box-title mt-3">Synopsis</h4>
-            <p class="px-1">Synopsis</p>
+            <h4 class="box-title mt-3">Sinopsis</h4>
+            <p class="px-1" th:text="${film.synopsis}"></p>
             <h5 class="mt-3">
               Puntación media:
               <i class="fa fa-star" th:each="i : ${#numbers.sequence(1, film.avgScore)}"></i>
@@ -54,6 +51,12 @@
           </div>
         </div>
         <div class="row mx-1 p-2">
+          <div class="col black-border">
+            <h5 class="display black-border-bottom">Directores</h5>
+            <ul class="list-unstyled">
+              <li th:each="director : *{directors}" th:text="${director.name + ' ' + director.surname}"></li>
+            </ul>
+          </div>
           <div class="col black-border">
             <h5 class="display black-border-bottom">Actores</h5>
             <ul class="list-unstyled">
