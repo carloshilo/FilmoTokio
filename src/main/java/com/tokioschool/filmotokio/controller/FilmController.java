@@ -8,12 +8,12 @@ import static com.tokioschool.filmotokio.domain.enums.TypePerson.SCREENWRITER;
 
 import com.tokioschool.filmotokio.domain.Film;
 import com.tokioschool.filmotokio.domain.Score;
-import com.tokioschool.filmotokio.domain.User;
 import com.tokioschool.filmotokio.domain.dto.FilmDTO;
 import com.tokioschool.filmotokio.domain.enums.FilmSearchCriteria;
 import com.tokioschool.filmotokio.service.FilmService;
 import com.tokioschool.filmotokio.service.PersonService;
 import com.tokioschool.filmotokio.service.ReviewService;
+import com.tokioschool.filmotokio.service.ScoreService;
 import com.tokioschool.filmotokio.service.UserService;
 import java.security.Principal;
 import java.util.Objects;
@@ -42,8 +42,8 @@ public class FilmController {
   private final @NonNull FilmService filmService;
   private final @NonNull UserService userService;
   private final @NonNull PersonService personService;
-
   private final @NonNull ReviewService reviewService;
+  private final @NonNull ScoreService scoreService;
 
   @GetMapping("films/search")
   public String searchFilm(@RequestParam(name = "query") String query,
@@ -68,7 +68,6 @@ public class FilmController {
 
     model.addAttribute("film", new FilmDTO(film, reviewService.getAllByFilm(film.getId())));
 
-
     if (Objects.nonNull(authentication)) {
       var user = userService.getByUsernameOrThrow(authentication.getName());
       var userScore = film.getScores()
@@ -92,8 +91,10 @@ public class FilmController {
     if (result.hasErrors()) {
       return "film";
     }
-    score.setUser((User) auth.getPrincipal());
-    filmService.addScore(filmUri, score);
+
+    score.setUser(userService.getByUsernameOrThrow(auth.getName()));
+    score.setFilm(filmService.getByUri(filmUri));
+    scoreService.add(score);
 
     return "redirect:/films/" + filmUri;
   }
