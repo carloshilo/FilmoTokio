@@ -94,19 +94,18 @@ public class UserServiceImpl implements UserService {
     user.setImage(fileName);
     userRepository.save(user);
 
-    fileService.saveFile(file, directoryProperties.users(), fileName);
+    fileService.save(file, directoryProperties.users(), fileName);
   }
 
   @Override
   public void saveImage(String username, MultipartFile file) {
     User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
     saveImage(user, file);
-
   }
 
   @Override
   @Transactional
-  public User updateUser(String oldUsername, User user) {
+  public User update(String oldUsername, User user) {
     log.info("Updating User {}", oldUsername);
     // check if username is new
     if (!oldUsername.equals(user.getUsername())
@@ -129,7 +128,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   @Transactional
-  public void deleteUser(String username) {
+  public void delete(String username) {
     log.info("Deleting User {}", username);
     User toDelete = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
     userRepository.delete(toDelete);

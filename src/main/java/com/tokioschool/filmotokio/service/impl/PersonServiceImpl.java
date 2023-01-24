@@ -21,7 +21,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person addPerson(Person dto) {
+    public Person add(Person dto) {
         Person person = Person.builder()
                 .name(dto.getName())
                 .surname(dto.getSurname())
@@ -33,7 +33,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> getPeopleByType(TypePerson type) {
+    public List<Person> getByType(TypePerson type) {
         log.info("Fetching Person of PersonTypeEnum {}", type);
         return personRepository.findByTypeOrderByNameAsc(type);
     }

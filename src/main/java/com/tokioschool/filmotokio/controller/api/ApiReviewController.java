@@ -34,7 +34,7 @@ public class ApiReviewController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
         Review received = convertToEntity(reviewDTO);
-        Review added = reviewService.addReview(received);
+        Review added = reviewService.add(received);
         ReviewDTO addedDTO = convertToDto(added);
         return ResponseEntity.status(HttpStatus.CREATED).body(addedDTO);
     }

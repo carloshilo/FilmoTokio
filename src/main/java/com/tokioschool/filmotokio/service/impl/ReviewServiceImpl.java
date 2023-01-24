@@ -25,7 +25,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Review addReview(Review review) {
+    public Review add(Review review) {
         User reviewingUser = review.getUser();
         Film reviewedFilm = review.getFilm();
 

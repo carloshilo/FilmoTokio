@@ -8,7 +8,7 @@ public interface ReviewService {
 
   List<Review> getAllByFilm(long id);
 
-  Review addReview(Review review);
+  Review add(Review review);
 
   Set<Review> findByUsername(String username);
 }
