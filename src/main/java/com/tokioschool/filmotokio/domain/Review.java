@@ -53,9 +53,7 @@ public class Review implements Serializable {
 
   public Review(ReviewDTO reviewDTO) {
     date = reviewDTO.getDate();
-    user = reviewDTO.getUser();
     title = reviewDTO.getTitle();
     textReview = reviewDTO.getText();
-    film = reviewDTO.getFilm();
   }
 }

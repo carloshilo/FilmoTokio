@@ -18,9 +18,11 @@ import java.security.Principal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
 @AllArgsConstructor
-@RequestMapping("api/review")
+@RequestMapping(value = "api/review", produces = APPLICATION_JSON_VALUE)
 @Slf4j
 public class ApiReviewController {
 
@@ -28,8 +30,8 @@ public class ApiReviewController {
     private final UserService userService;
     private final FilmService filmService;
 
-    @PostMapping(path = "/new", consumes = "application/json", produces = {"application/json", "text/xml"})
-    public ResponseEntity<?> addReview(@RequestBody ReviewDTO reviewDTO, Principal principal) {
+    @PostMapping(path = "/new", consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<ReviewDTO> addReview(@RequestBody ReviewDTO reviewDTO, Principal principal) {
         if (!reviewDTO.getUser().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
         }
@@ -39,8 +41,8 @@ public class ApiReviewController {
         return ResponseEntity.status(HttpStatus.CREATED).body(addedDTO);
     }
 
-    @GetMapping(path = "/user/{username}")
-    public ResponseEntity<?> getUserReviews(@PathVariable String username, Authentication auth) {
+    @GetMapping("/user/{username}")
+    public ResponseEntity<Set<ReviewDTO>> getUserReviews(@PathVariable String username, Authentication auth) {
         if (!username.equals(auth.getName())) {
             if (!auth.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
@@ -53,15 +55,13 @@ public class ApiReviewController {
     private Review convertToEntity(ReviewDTO reviewDTO) {
         Review review = new Review(reviewDTO);
         review.setTextReview(reviewDTO.getText());
-        review.setUser(userService.getByUsernameOrThrow(reviewDTO.getUser().getUsername()));
-        review.setFilm(filmService.getByUri(reviewDTO.getFilm().getUri()));
+        review.setUser(userService.getByUsernameOrThrow(reviewDTO.getUser()));
+        review.setFilm(filmService.getByUri(reviewDTO.getFilm()));
         return review;
     }
 
     private ReviewDTO convertToDto(Review review) {
-        ReviewDTO dto = new ReviewDTO(review);
-        dto.setFilm(review.getFilm());
-        return dto;
+        return new ReviewDTO(review);
     }
 
     private Set<ReviewDTO> convertToDtos(Set<Review> reviews) {

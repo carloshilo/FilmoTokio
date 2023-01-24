@@ -14,3 +14,9 @@ main {
 .bold {
   font-weight: bold;
 }
+
+footer ul a {
+    color: #b2b2b2;
+    font-size: 1.3rem;
+    padding: 8mm;
+}
