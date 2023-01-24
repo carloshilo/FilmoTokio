@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
+@Getter
 public enum TypePerson {
   SCREENWRITER("Guionista"),
   MUSICIAN("Música"),
@@ -11,7 +12,6 @@ public enum TypePerson {
   ACTOR("Actor"),
   DIRECTOR("Director");
 
-  @Getter
   private final String displayValue;
 
 }

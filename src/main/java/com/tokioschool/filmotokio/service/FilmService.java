@@ -14,12 +14,7 @@ public interface FilmService {
 
     Set<FilmDTO> getAll();
     Set<Film> findAllBy(String searchParam, String searchCriteria);
-
-    Film addScore(UUID filmUri, Score score);
-
     Film savePoster(Film film, MultipartFile posterImage);
 
     Film add(FilmDTO film, String username);
-
-    Film findByTitleExact(String title);
 }

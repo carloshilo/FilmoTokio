@@ -23,7 +23,7 @@ public class FileServiceImpl implements FileService {
     private final @NonNull ResourceLoader resourceLoader;
 
     @Override
-    public void saveFile(MultipartFile file, String directory, String fileName)
+    public void save(MultipartFile file, String directory, String fileName)
             throws ImageUploadException {
         log.info("Saving file {} as {}", file, fileName);
         try (InputStream fileStream = file.getInputStream()) {
