@@ -11,6 +11,7 @@ import lombok.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -36,5 +37,10 @@ public class ReviewServiceImpl implements ReviewService {
             review.setFilm(reviewedFilm);
             return reviewRepository.save(review);
         }
+    }
+
+    @Override
+    public Set<Review> findByUsername(String username) {
+        return reviewRepository.findByUserUsername(username);
     }
 }

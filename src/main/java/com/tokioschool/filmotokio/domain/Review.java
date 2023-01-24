@@ -2,6 +2,7 @@ package com.tokioschool.filmotokio.domain;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+
+import com.tokioschool.filmotokio.domain.dto.ReviewDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,7 +43,7 @@ public class Review implements Serializable {
   private String textReview;
   @CreatedDate
   @Column(nullable = false)
-  private Date date;
+  private LocalDate date;
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
@@ -48,4 +51,11 @@ public class Review implements Serializable {
   @JoinColumn(name = "film_id")
   private Film film;
 
+  public Review(ReviewDTO reviewDTO) {
+    date = reviewDTO.getDate();
+    user = reviewDTO.getUser();
+    title = reviewDTO.getTitle();
+    textReview = reviewDTO.getText();
+    film = reviewDTO.getFilm();
+  }
 }

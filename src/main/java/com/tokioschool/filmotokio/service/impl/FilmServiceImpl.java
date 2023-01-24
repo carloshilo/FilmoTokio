@@ -70,22 +70,27 @@ public class FilmServiceImpl implements FilmService {
     return filmRepository.save(toUpdate);
   }
 
-  @Override
-  public Film add(FilmDTO dto, String username) {
-    Film film = Film.builder()
-        .people(Stream.of(dto.getActors(), dto.getDirectors(), dto.getMusicians(),
-                dto.getPhotographers(), dto.getScreenwriters())
-            .flatMap(Collection::stream)
-            .collect(Collectors.toSet()))
-        .duration(dto.getDuration())
-        .year(dto.getYear())
-        .title(dto.getTitle())
-        .poster(dto.getPoster())
-        .synopsis(dto.getSynopsis())
-        .uri(UUID.randomUUID())
-        .build();
-    film.setUser(userService.getByUsernameOrThrow(username));
-    log.info("Saving Film {}", film);
-    return filmRepository.save(film);
-  }
+    @Override
+    public Film add(FilmDTO dto, String username) {
+        Film film = Film.builder()
+                .people(Stream.of(dto.getActors(), dto.getDirectors(), dto.getMusicians(),
+                                dto.getPhotographers(), dto.getScreenwriters())
+                        .flatMap(Collection::stream)
+                        .collect(Collectors.toSet()))
+                .duration(dto.getDuration())
+                .year(dto.getYear())
+                .title(dto.getTitle())
+                .poster(dto.getPoster())
+                .synopsis(dto.getSynopsis())
+                .uri(UUID.randomUUID())
+                .build();
+        film.setUser(userService.getByUsernameOrThrow(username));
+        log.info("Saving Film {}", film);
+        return filmRepository.save(film);
+    }
+
+    @Override
+    public Film findByTitleExact(String title) {
+        return filmRepository.findByTitleIgnoreCase(title).orElseThrow(FilmNotFoundException::new);
+    }
 }

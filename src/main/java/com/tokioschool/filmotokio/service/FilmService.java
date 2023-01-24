@@ -20,4 +20,6 @@ public interface FilmService {
     Film savePoster(Film film, MultipartFile posterImage);
 
     Film add(FilmDTO film, String username);
+
+    Film findByTitleExact(String title);
 }
