@@ -8,15 +8,15 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @AllArgsConstructor
 public enum FilmSearchCriteria {
-  TITLE("Title"),
-  YEAR("Year"),
-  MAX_DURATION("Max Length"),
-  AVG_SCORE("Average Score"),
+  TITLE("Título"),
+  YEAR("Año"),
+  MAX_DURATION("Duración máxima"),
+  AVG_SCORE("Puntación media"),
   ACTOR("Actor"),
   DIRECTOR("Director"),
-  SCREENWRITER("Screenwriter"),
-  CINEMATOGRAPHER("Cinematographer"),
-  COMPOSER("Composer");
+  SCREENWRITER("Guionista"),
+  PHOTOGRAPHER("Fotografía"),
+  MUSICIAN("Música");
 
   private final String displayValue;
 

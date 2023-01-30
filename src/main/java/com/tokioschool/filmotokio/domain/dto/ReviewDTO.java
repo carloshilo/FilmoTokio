@@ -2,9 +2,6 @@ package com.tokioschool.filmotokio.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.tokioschool.filmotokio.domain.Review;
-import com.tokioschool.filmotokio.domain.User;
-import java.io.Serial;
-import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
