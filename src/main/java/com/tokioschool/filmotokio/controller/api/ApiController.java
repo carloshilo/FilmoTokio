@@ -6,6 +6,10 @@ import com.tokioschool.filmotokio.domain.Review;
 import com.tokioschool.filmotokio.domain.dto.ReviewDTO;
 import com.tokioschool.filmotokio.service.ReviewService;
 import com.tokioschool.filmotokio.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import javax.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -31,6 +35,9 @@ public class ApiController {
   private final @NonNull ReviewService reviewService;
   private final @NonNull UserService userService;
 
+  @Operation(summary = "Creates a new review for a film", responses = {
+      @ApiResponse(responseCode = "200", description = "Created review")
+  })
   @PostMapping(path = "/new-review", consumes = APPLICATION_JSON_VALUE)
   public ResponseEntity<ReviewDTO> addReview(@RequestBody @Valid ReviewDTO reviewDTO) {
     Review added = reviewService.add(reviewDTO);
@@ -38,8 +45,12 @@ public class ApiController {
     return ResponseEntity.status(HttpStatus.CREATED).body(addedDTO);
   }
 
+  @Operation(summary = "Get a list of user's review", responses = {
+      @ApiResponse(responseCode = "200", description = "List of reviews")
+  })
   @GetMapping("/user/{id}/reviews")
-  public ResponseEntity<List<ReviewDTO>> getUserReviews(@PathVariable Long id,
+  public ResponseEntity<List<ReviewDTO>> getUserReviews(
+      @Parameter(name = "id", required = true, description = "User's identifier") @PathVariable Long id,
       Authentication auth) {
     var user = userService.getById(id).orElseThrow(
         () -> {
