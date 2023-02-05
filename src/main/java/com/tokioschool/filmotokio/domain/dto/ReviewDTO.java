@@ -22,14 +22,12 @@ public class ReviewDTO implements Serializable {
 
     private String title;
     private String text;
-    private LocalDate date;
     private String user;
     private UUID film;
 
     public ReviewDTO(Review review) {
         this.title = review.getTitle();
         this.text = review.getTextReview();
-        this.date = review.getDate();
         this.user = review.getUser().getUsername();
         this.film = review.getFilm().getUri();
     }
