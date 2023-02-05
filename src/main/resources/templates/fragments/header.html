@@ -1,53 +1,44 @@
-<header xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+<header th:fragment="header"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
         xmlns:th="http://www.thymeleaf.org">
-  <nav aria-label="Navbar"
-       class="navbar static-top navbar-expand-md navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" th:href="@{/}" th:text="'FilmTokio'"></a>
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/} " th:text="'Inicio'"></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/films/add}"
+  <!--/*@thymesVar id="user" type="com.tokioschool.filmotokio.domain.User"*/-->
+  <nav th:class="'navbar static-top navbar-expand-md navbar-dark bg-dark'">
+    <div th:class="'container-fluid'">
+      <a th:class="'navbar-brand'" th:href="@{/}" th:text="'FilmTokio'"></a>
+      <ul th:class="'navbar-nav me-auto'">
+        <li th:class="'nav-item'">
+          <a sec:authorize="hasAnyAuthority('USER', 'ADMIN')" th:class="'nav-link'"
+             th:href="@{/films/add}"
              th:text="'Añadir película'"></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/person/add}"
+        <li th:class="'nav-item'">
+          <a sec:authorize="hasAnyAuthority('USER', 'ADMIN')" th:class="'nav-link'"
+             th:href="@{/films/search}"
+             th:text="'Buscar película'"></a>
+        </li>
+        <li th:class="'nav-item'">
+          <a sec:authorize="hasAnyAuthority('USER', 'ADMIN')" th:class="'nav-link'"
+             th:href="@{/person/add}"
              th:text="'Añadir persona'"></a>
         </li>
-        <li class="nav-item" sec:authorize="hasAuthority('ADMIN')">
-          <a class="nav-link" th:href="@{/signup}" th:text="'Añadir usuario'"></a>
+        <li sec:authorize="hasAuthority('ADMIN')" th:class="'nav-item'">
+          <a th:class="'nav-link'" th:href="@{/users/add}" th:text="'Añadir usuario'"></a>
         </li>
       </ul>
-      <form class="d-flex align-items-center" th:action="@{/films/search}" th:method="get">
-        <input class="form-control" th:id="query" th:name="query" th:placeholder="'Buscar película'"
-               th:type="text">
-        <button class="btn btn-outline-success mx-2" th:type="submit">
-          <i class="fas fa-search"></i>
-        </button>
-      </form>
-      <ul class="navbar-nav navbar-right">
+      <ul th:class="'navbar-nav navbar-right'">
         <li sec:authorize="!isAuthenticated()">
-          <a class="btn btn-outline-light" th:href="@{/login}" th:text="'Inicio sesión'"></a>
+          <a th:class="'btn btn-outline-light'" th:href="@{/login}" th:text="'Inicio sesión'"></a>
         </li>
         <li sec:authorize="!isAuthenticated()">
-          <a class="btn btn-outline-light" th:href="@{/users/signup} " th:text="'Registro'"></a>
+          <a th:class="'btn btn-outline-light'" th:href="@{/users/signup} "
+             th:text="'Registro'"></a>
         </li>
-        <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-          <div class="btn-group dropstart">
-            <button aria-expanded="false" class="btn btn-outline-light dropdown-toggle"
-                    data-bs-toggle="dropdown"
-                    sec:authentication="name"
-                    th:type="button"></button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" th:href="@{/users/profile}" th:text="'Perfil'"></a></li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item" th:href="@{/logout}" th:text="'Cerrar sesión'"></a></li>
-            </ul>
-          </div>
+        <li sec:authorize="isAuthenticated()">
+          <!--<img th:class="'img-thumbnail'" th:src="@{'/images/users/' + *{user.image}}">-->
+        </li>
+        <li sec:authorize="isAuthenticated()">
+          <a th:class="'btn btn-outline-light'" th:href="@{/logout} "
+             th:text="'Cerrar sesión'"></a>
         </li>
       </ul>
     </div>

@@ -1,10 +1,10 @@
-<head xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head" xmlns:th="http://www.thymeleaf.org">
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1" name="viewport">
-  <title th:text="${titulo}"></title>
-  <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
-  <link th:rel="stylesheet" th:href="@{/webjars/font-awesome/css/all.css}">
-  <link th:rel="stylesheet" th:href="@{/css/style.css}">
+  <title th:text="'FilmoTokio'"></title>
+  <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" th:rel="stylesheet"/>
+  <link th:href="@{/webjars/font-awesome/css/all.css}" th:rel="stylesheet">
+  <link th:href="@{/css/style.css}" th:rel="stylesheet">
 
   <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
   <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
