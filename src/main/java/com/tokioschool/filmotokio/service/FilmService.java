@@ -1,20 +1,22 @@
 package com.tokioschool.filmotokio.service;
 
 import com.tokioschool.filmotokio.domain.Film;
-import com.tokioschool.filmotokio.domain.Score;
 import com.tokioschool.filmotokio.domain.dto.FilmDTO;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Set;
-
 public interface FilmService {
 
-    Film getByUri(UUID uri);
+  Film getByUri(UUID uri);
 
-    Set<FilmDTO> getAll();
-    Set<Film> findAllBy(String searchParam);
-    Film savePoster(Film film, MultipartFile posterImage);
+  Set<FilmDTO> getAll();
 
-    Film add(FilmDTO film, String username);
+  Set<Film> findAllBy(String searchParam);
+
+  Film savePoster(Film film, MultipartFile posterImage);
+
+  Film add(FilmDTO film, String username);
+
+  void updateAvgScore(UUID uri, int avgScore);
 }

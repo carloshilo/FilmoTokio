@@ -12,5 +12,5 @@ public interface ReviewService {
 
     Review add(ReviewDTO reviewDTO);
 
-    Set<Review> findByUsername(String username);
+    List<Review> findByUsername(String username);
 }

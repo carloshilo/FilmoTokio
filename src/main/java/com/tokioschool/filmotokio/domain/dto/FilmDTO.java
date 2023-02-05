@@ -37,7 +37,7 @@ public class FilmDTO implements Serializable {
   private UUID uri;
   private int duration;
   private String poster;
-  private float avgScore;
+  private int avgScore;
   private String synopsis;
   private Set<Person> directors = new HashSet<>();
   private Set<Person> actors = new HashSet<>();

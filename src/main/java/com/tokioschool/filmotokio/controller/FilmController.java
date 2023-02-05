@@ -86,9 +86,16 @@ public class FilmController {
       return "film";
     }
 
-    score.setUser(userService.getByUsernameOrThrow(auth.getName()));
-    score.setFilm(filmService.getByUri(filmUri));
+    var film = filmService.getByUri(filmUri);
+    var user = userService.getByUsernameOrThrow(auth.getName());
+
+    score.setUser(user);
+    score.setFilm(film);
     scoreService.add(score);
+
+    var avgScore = scoreService.getAvgScore(filmUri);
+
+    filmService.updateAvgScore(filmUri, avgScore);
 
     return "redirect:/films/" + filmUri;
   }

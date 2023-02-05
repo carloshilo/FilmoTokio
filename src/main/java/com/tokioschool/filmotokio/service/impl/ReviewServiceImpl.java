@@ -51,7 +51,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Set<Review> findByUsername(String username) {
+    public List<Review> findByUsername(String username) {
         return reviewRepository.findByUserUsername(username);
     }
 }

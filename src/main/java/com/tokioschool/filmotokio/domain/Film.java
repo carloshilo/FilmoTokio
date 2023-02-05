@@ -65,7 +65,7 @@ public class Film implements Serializable {
   private Date dateMigrate;
 
   @Column(nullable = false)
-  private float avgScore;
+  private int avgScore;
 
   @ManyToOne
   @JoinColumn(name = "user_id")

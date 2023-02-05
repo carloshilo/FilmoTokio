@@ -80,4 +80,11 @@ public class FilmServiceImpl implements FilmService {
     log.info("Saving Film {}", film);
     return filmRepository.save(film);
   }
+
+  @Override
+  public void updateAvgScore(UUID uri, int avgScore) {
+    var film = filmRepository.findByUri(uri).orElse(new Film());
+    film.setAvgScore(avgScore);
+    filmRepository.save(film);
+  }
 }
