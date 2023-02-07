@@ -1,6 +1,7 @@
 insert into roles (name) values ('ADMIN'); -- 1
 insert into roles (name) values ('USER'); -- 2
 
+insert into users (active, birthdate, creation_date, email, name, password, surname, username, role_id) values (true, '1990-01-01 18:33:09.242000', now(), 'tokioschool@gmail.com', 'Tokio', 'Tokioschool', 'School', 'tokioschool', 1);
 insert into users (active, birthdate, creation_date, email, name, password, surname, username, role_id) values (true, '1990-01-01 18:33:09.242000', now(), 'admin@gmail.com', 'Admin', '$2a$10$2jEcuJBvvY8iLphLQ6male9mDxp0XN9nFK/9jUacyUBDOMYn8gGka', 'Super', 'admin', 1);
 
 insert into films (duration, migrate, poster, synopsis, title, year, user_id, avg_score, uri) values (41, false, '3bc66c60-50bd-45e1-9b1d-645700f1494a.jpg', 'Con la intención de que Peter tenga una Navidad inolvidable, Mantis y Drax viajan a la Tierra para conseguir el regalo perfecto.', 'Guardianes de la Galaxia: Especial felices fiestas', 2022, 1, 0, '3bc66c60-50bd-45e1-9b1d-645700f1494a');
