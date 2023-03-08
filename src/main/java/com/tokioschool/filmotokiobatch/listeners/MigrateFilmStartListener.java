@@ -1,4 +1,4 @@
-package com.tokioschool.filmotokio.batch;
+package com.tokioschool.filmotokiobatch.listeners;
 
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
@@ -13,14 +13,15 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class MigrateFilmStartListener extends JobExecutionListenerSupport {
 
-  private final @NonNull JdbcTemplate jdbcTemplate;
+    private final @NonNull JdbcTemplate jdbcTemplate;
 
-  @Override
-  public void beforeJob(JobExecution jobExecution) {
-    log.info("Migrate job starting...");
+    @Override
+    public void beforeJob(JobExecution jobExecution) {
+        log.info("Migrate job starting...");
 
-    jdbcTemplate.query("SELECT COUNT (*) FROM films WHERE migrate = 0",
-            (rs, rw) -> rs.getInt(1))
-        .forEach(count -> log.info("{} Films to migrate", count));
-  }
+        jdbcTemplate.query("SELECT COUNT (*) FROM films WHERE migrate = 0",
+                        (rs, rw) -> rs.getInt(1))
+                .forEach(count -> log.info("{} Films to migrate", count));
+    }
+
 }

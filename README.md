@@ -109,87 +109,90 @@ La estructura final del programa es:
     │   ├── java
     │   │   └── com
     │   │       └── tokioschool
-    │   │           └── filmotokio
-    │   │               ├── batch
+    │   │           ├── filmotokio
+    │   │           │   ├── configuration
+    │   │           │   │   ├── ValidationMessageConfig.java
+    │   │           │   │   └── WebConfig.java
+    │   │           │   ├── controller
+    │   │           │   │   ├── api
+    │   │           │   │   │   └── ApiController.java
+    │   │           │   │   ├── FilmController.java
+    │   │           │   │   ├── IndexController.java
+    │   │           │   │   ├── PersonController.java
+    │   │           │   │   └── UserController.java
+    │   │           │   ├── domain
+    │   │           │   │   ├── annotation
+    │   │           │   │   │   └── SamePassword.java
+    │   │           │   │   ├── dto
+    │   │           │   │   │   ├── ChangePasswordDTO.java
+    │   │           │   │   │   ├── CreateUserDTO.java
+    │   │           │   │   │   ├── EditUserDTO.java
+    │   │           │   │   │   ├── FilmDTO.java
+    │   │           │   │   │   ├── LoginDTO.java
+    │   │           │   │   │   ├── PasswordDTO.java
+    │   │           │   │   │   └── ReviewDTO.java
+    │   │           │   │   ├── enums
+    │   │           │   │   │   └── TypePerson.java
+    │   │           │   │   ├── validator
+    │   │           │   │   │   └── SamePasswordValidator.java
+    │   │           │   │   ├── Film.java
+    │   │           │   │   ├── Person.java
+    │   │           │   │   ├── Review.java
+    │   │           │   │   ├── Role.java
+    │   │           │   │   ├── Score.java
+    │   │           │   │   └── User.java
+    │   │           │   ├── exception
+    │   │           │   │   ├── FilmNotFoundException.java
+    │   │           │   │   ├── ImageUploadException.java
+    │   │           │   │   ├── ReviewAlreadyExistsException.java
+    │   │           │   │   ├── UnauthorizedException.java
+    │   │           │   │   ├── UsernameAlreadyExistsException.java
+    │   │           │   │   └── UserNotFoundException.java
+    │   │           │   ├── FilmoTokioApplication.java
+    │   │           │   ├── properties
+    │   │           │   │   └── FileDirectoryProperties.java
+    │   │           │   ├── repository
+    │   │           │   │   ├── FilmRepository.java
+    │   │           │   │   ├── PersonRepository.java
+    │   │           │   │   ├── ReviewRepository.java
+    │   │           │   │   ├── RoleRepository.java
+    │   │           │   │   ├── ScoreRepository.java
+    │   │           │   │   └── UserRepository.java
+    │   │           │   ├── security
+    │   │           │   │   ├── service
+    │   │           │   │   │   └── JpaUserDetailsService.java
+    │   │           │   │   ├── LoginSuccessHandler.java
+    │   │           │   │   └── SecurityConfig.java
+    │   │           │   ├── service
+    │   │           │   │   ├── FileService.java
+    │   │           │   │   ├── FilmService.java
+    │   │           │   │   ├── impl
+    │   │           │   │   │   ├── FileServiceImpl.java
+    │   │           │   │   │   ├── FilmServiceImpl.java
+    │   │           │   │   │   ├── PersonServiceImpl.java
+    │   │           │   │   │   ├── ReviewServiceImpl.java
+    │   │           │   │   │   ├── ScoreServiceImpl.java
+    │   │           │   │   │   ├── RoleServiceImpl.java
+    │   │           │   │   │   └── UserServiceImpl.java
+    │   │           │   │   ├── PersonService.java
+    │   │           │   │   ├── ReviewService.java
+    │   │           │   │   ├── RoleService.java
+    │   │           │   │   ├── ScoreService.java
+    │   │           │   │   └── UserService.java
+    │   │           │   └── utils
+    │   │           │       ├── Constants.java
+    │   │           │       ├── FileUtils.java
+    │   │           │       └── StringUtil.java
+    │   │           └── filmotokiobatch    
+    │   │               ├── config
+    │   │               │   └── JobBatchConfiguration.java
+    │   │               ├── items
     │   │               │   ├── FilmItemProcessor.java
     │   │               │   ├── FilmLineAggregator.java
-    │   │               │   ├── FilmMapper.java
-    │   │               │   ├── MigrateFilmStartListener.java
-    │   │               │   ├── MigrateFilmWriteListener.java
-    │   │               │   └── MigrateJobConfig.java
-    │   │               ├── configuration
-    │   │               │   ├── ValidationMessageConfig.java
-    │   │               │   └── WebConfig.java
-    │   │               ├── controller
-    │   │               │   ├── api
-    │   │               │   │   └── ApiController.java
-    │   │               │   ├── FilmController.java
-    │   │               │   ├── IndexController.java
-    │   │               │   ├── PersonController.java
-    │   │               │   └── UserController.java
-    │   │               ├── domain
-    │   │               │   ├── annotation
-    │   │               │   │   └── SamePassword.java
-    │   │               │   ├── dto
-    │   │               │   │   ├── ChangePasswordDTO.java
-    │   │               │   │   ├── CreateUserDTO.java
-    │   │               │   │   ├── EditUserDTO.java
-    │   │               │   │   ├── FilmDTO.java
-    │   │               │   │   ├── LoginDTO.java
-    │   │               │   │   ├── PasswordDTO.java
-    │   │               │   │   └── ReviewDTO.java
-    │   │               │   ├── enums
-    │   │               │   │   └── TypePerson.java
-    │   │               │   ├── validator
-    │   │               │   │   └── SamePasswordValidator.java
-    │   │               │   ├── Film.java
-    │   │               │   ├── Person.java
-    │   │               │   ├── Review.java
-    │   │               │   ├── Role.java
-    │   │               │   ├── Score.java
-    │   │               │   └── User.java
-    │   │               ├── exception
-    │   │               │   ├── FilmNotFoundException.java
-    │   │               │   ├── ImageUploadException.java
-    │   │               │   ├── ReviewAlreadyExistsException.java
-    │   │               │   ├── UnauthorizedException.java
-    │   │               │   ├── UsernameAlreadyExistsException.java
-    │   │               │   └── UserNotFoundException.java
-    │   │               ├── FilmoTokioApplication.java
-    │   │               ├── properties
-    │   │               │   └── FileDirectoryProperties.java
-    │   │               ├── repository
-    │   │               │   ├── FilmRepository.java
-    │   │               │   ├── PersonRepository.java
-    │   │               │   ├── ReviewRepository.java
-    │   │               │   ├── RoleRepository.java
-    │   │               │   ├── ScoreRepository.java
-    │   │               │   └── UserRepository.java
-    │   │               ├── security
-    │   │               │   ├── service
-    │   │               │   │   └── JpaUserDetailsService.java
-    │   │               │   ├── LoginSuccessHandler.java
-    │   │               │   └── SecurityConfig.java
-    │   │               ├── service
-    │   │               │   ├── FileService.java
-    │   │               │   ├── FilmService.java
-    │   │               │   ├── impl
-    │   │               │   │   ├── FileServiceImpl.java
-    │   │               │   │   ├── FilmServiceImpl.java
-    │   │               │   │   ├── PersonServiceImpl.java
-    │   │               │   │   ├── ReviewServiceImpl.java
-    │   │               │   │   ├── ScoreServiceImpl.java
-    │   │               │   │   ├── RoleServiceImpl.java
-    │   │               │   │   └── UserServiceImpl.java
-    │   │               │   ├── PersonService.java
-    │   │               │   ├── ReviewService.java
-    │   │               │   ├── RoleService.java
-    │   │               │   ├── ScoreService.java
-    │   │               │   └── UserService.java
-    │   │               └── utils
-    │   │                   ├── Constants.java
-    │   │                   ├── FileUtils.java
-    │   │                   └── StringUtil.java
+    │   │               │   └── FilmMapper.java
+    │   │               └── listeners
+    │   │                   ├── MigrateFilmStartListener.java
+    │   │                   └── MigrateFilmWriteListener.java
     │   └── resources
     │       ├── application.yml
     │       ├── import.sql
@@ -223,10 +226,12 @@ La estructura final del programa es:
         ├── java
         │   └── com
         │       └── tokioschool
-        │           └── demo
-        │               ├── FilmoTokioApplicationTests.java
+        │           ├── filmotikio
+        │           │   └── FilmoTokioApplicationTests.java
+        │           └── filmotikiobatch
         │               └── FilmoTokioBatchApplicationTests.java
         └── resources
+            ├── application.yml
             └── test.sql
 ```
 
