@@ -242,4 +242,38 @@ El Usuario es la fundación de nuestra app. Casi todos los datos, de `Film`, `Sc
 ### Objeto de Dominio
 [User.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/domain/User.java)
 
-Como se puede ver, decidí implementar el `interface` de `Serializable` con el objeto de dominio `User`.
+Como se puede ver, decidí implementar el `interface` de `Serializable` con el objeto de dominio `User`. Esto permitirá que se puedan serializar instancias de `User` y así ser almacenadas en la base de datos o transferidas entre diferentes componentes de la aplicación. Además, al utilizar esta interfaz me aseguro que `User` es compatible con otros componentes que requieran que los objetos que manejan sean serializables, como el caso de la sesión de usuario.
+
+Utilicé las anotaciones de `@Getter`, `@Setter`, `@Builder`, `@NoArgsConstructor` y `@AllArgsConstructor` para generar automáticamente los getters, setters y constructores de la clase, reduciendo el código repetitivo y haciendo que sea más fácil de leer y mantener.
+
+Además, también utiliza las anotaciones de `@OneToMany` y `@ManyToOne`. La anotación `@OneToMany` sirve para definir la relación entre un `User` y sus `Film`, `Review` y `Score` en la base de datos. Esta anotación indica que un usuario puede tener muchas películas, revisiones y puntuaciones en la base de datos. La anotación `@ManyToOne` sirve para definir la relación entre un `User` y su `Role` en la base de datos. Esta anotación indica que un usuario puede tener un rol y que muchos usuarios pueden tener el mismo rol en la base de datos.
+
+### Creación de Usuario
+
+* [index.html](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/resources/templates/index.html)
+* [head.html](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/resources/templates/fragments/head.html)
+* [header.html](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/resources/templates/fragments/header.html)
+* [footer.html](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/resources/templates/fragments/footer.html)
+
+Al llegar a la página inicial de la plataforma FilmTokio, encontramos en el encabezado de la página un botón llamado 'Registro' para crear un nuevo usuario.
+
+![header unauthenticated user](readme-pics/Header-login.png)
+
+En el archivo `header.html`, se puede observar que si el usuario no ha iniciado sesión, se muestran los botones para iniciar sesión ('Iniciar sesión') o registrarse ('Registro').
+```
+<li sec:authorize="!isAuthenticated()">
+    <a th:class="'btn btn-outline-light'" th:href="@{/login}" th:text="'Inicio sesión'"></a>
+</li>
+<li sec:authorize="!isAuthenticated()">
+    <a th:class="'btn btn-outline-light'" th:href="@{/users/signup}" th:text="'Registro'"></a>
+</li>
+```
+Al hacer clic en el botón de registro, se llama al método `@GetMapping` en el controlador `UserController`. Este método crea un nuevo objeto de tipo `CreateUserDTO` y lo agrega al modelo de `signup.html`. También carga el modelo con los `Role` disponibles en caso de que sea un `Admin` que quiera crear un nuevo `User`.
+```
+@GetMapping("/signup")
+  public String signup(Model model) {
+    model.addAttribute("model", new CreateUserDTO());
+    model.addAttribute("roles", roleService.findAll());
+    return "signup";
+  }
+```
