@@ -1,16 +1,19 @@
 spring:
-  batch.jdbc.initialize-schema: always
+  batch:
+    jdbc:
+      initialize-schema: always
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE;NON_KEYWORDS=YEAR,VALUE;MODE=MySQL
     driver-class-name: org.h2.Driver
     username: sa
     password: password
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     generate-ddl: true
-    defer-datasource-initialization: true
+    #    defer-datasource-initialization: true
     show-sql: true
     hibernate.ddl-auto: update
+
   h2:
     console:
       enabled: true

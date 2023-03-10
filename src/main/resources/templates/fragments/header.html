@@ -22,7 +22,7 @@
              th:text="'Añadir persona'"></a>
         </li>
         <li sec:authorize="hasAuthority('ADMIN')" th:class="'nav-item'">
-          <a th:class="'nav-link'" th:href="@{/users/add}" th:text="'Añadir usuario'"></a>
+          <a th:class="'nav-link'" th:href="@{/users/signup}" th:text="'Añadir usuario'"></a>
         </li>
       </ul>
       <ul th:class="'navbar-nav navbar-right'">
