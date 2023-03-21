@@ -1073,7 +1073,6 @@ librería `Springdocs`.
 
 Se puede ver la documentación en la url [`http://localhost:8080/swagger-ui/index.html`](http://localhost:8080/swagger-ui/index.html).
 
-
 ## Seguridad
 
 * [SecurityConfig.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/security/SecurityConfig.java)
@@ -1216,12 +1215,6 @@ Este método tiene 10 pasos:
 #### Proceso de autenticación
 
 * [ApiAuthenticationController.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/controller/api/ApiAuthenticationController.java)
-
-El proceso de autenticación para el REST API es el siguiente. Utilizando la herramienta `httpie` para conectarse con el servidor, podemos enviar una solicitud de autenticación de la siguiente manera:
-
-```bash
-http POST http://localhost:8080/api/auth  -a username=admin password=admin
-```
 
 El servidor interpreta el `username` y `password` enviados y los convierte en un objeto de tipo `JwtRequest`, que luego se envía al método `login(@RequestBody JwtRequest authRequest)` del controlador `ApiAuthenticationController`.
 
