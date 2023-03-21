@@ -41,13 +41,18 @@ Proporcionaré en el propio documento fragmentos de código que requieren más e
       - [Información de Película](#información-de-película)
       - [Dar puntuación a una película](#dar-puntuación-a-una-película)
           - [FilmService.updateAvgScore(UUID uri, int avgScore)](#filmserviceupdateavgscore--uuid-uri-int-avgscore-)
-        
   - [Review](#review)
       - [Solicitar reseñas del usuario](#solicitar-reseñas-del-usuario)
       - [Creando una reseña nueva](#creando-una-reseña-nueva)
       - [ReviewService](#reviewservice)
           - [findByUsername(String username)](#findbyusername--string-username-)
           - [addReview(Review review)](#addreview--review-review-)
+    - [Documentación Open API](#documentación-open-api)
+    - [Seguridad](#seguridad)
+        - [Seguridad JWT](#seguridad-jwt)
+            - [JwtRequest y JwtResponse](#jwtrequest-y-jwtresponse)
+            - [JwtRequestFilter](#jwtrequestfilter)
+            - [Proceso de autenticación](#proceso-de-autenticación)
   - [Proceso Batch](#proceso-batch)
       - [JobBatchConfiguration](#jobbatchconfiguration)
           - [reader()](#reader--)
@@ -82,10 +87,12 @@ La estructura final del programa es:
     │   │       └── tokioschool
     │   │           ├── filmotokio
     │   │           │   ├── configuration
+    │   │           │   │   ├── SwaggerConfig.java
     │   │           │   │   ├── ValidationMessageConfig.java
     │   │           │   │   └── WebConfig.java
     │   │           │   ├── controller
     │   │           │   │   ├── api
+    │   │           │   │   │   ├── ApiAuthenticationController.java
     │   │           │   │   │   └── ApiController.java
     │   │           │   │   ├── FilmController.java
     │   │           │   │   ├── IndexController.java
@@ -128,6 +135,12 @@ La estructura final del programa es:
     │   │           │   │   ├── ScoreRepository.java
     │   │           │   │   └── UserRepository.java
     │   │           │   ├── security
+    │   │           │   │   ├── jwt
+    │   │           │   │   │   ├── JwtAuthenticationEntryPoint.java
+    │   │           │   │   │   ├── JwtRequest.java
+    │   │           │   │   │   ├── JwtRequestFilter.java
+    │   │           │   │   │   ├── JwtResponse.java
+    │   │           │   │   │   └── JwtTokenUtil.java
     │   │           │   │   ├── service
     │   │           │   │   │   └── JpaUserDetailsService.java
     │   │           │   │   ├── LoginSuccessHandler.java
@@ -241,7 +254,7 @@ Registro' para crear un nuevo usuario.
 En el archivo `header.html`, se puede observar que si el usuario no ha iniciado sesión, se muestran los botones para
 iniciar sesión ('Iniciar sesión') o registrarse ('Registro').
 
-```
+```html
 <li sec:authorize="!isAuthenticated()">
     <a th:class="'btn btn-outline-light'" th:href="@{/login}" th:text="'Inicio sesión'"></a>
 </li>
@@ -254,7 +267,7 @@ Al hacer clic en el botón de registro, se llama al método `@GetMapping` en el 
 crea un nuevo objeto de tipo `CreateUserDTO` y lo agrega al modelo de `signup.html`. También carga el modelo con
 los `Role` disponibles en caso de que sea un `Admin` que quiera crear un nuevo `User`.
 
-```
+```java
 @GetMapping("/signup")
   public String signup(Model model) {
     model.addAttribute("model", new CreateUserDTO());
@@ -269,12 +282,12 @@ los `Role` disponibles en caso de que sea un `Admin` que quiera crear un nuevo `
 * [PasswordDTO.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/domain/dto/PasswordDTO.java)
 
 Decidí utilizar objetos DTO para la creación y actualización de usuarios con el fin de verificar las contraseñas.
-Además, sólo es necesario incluir los campos necesarios para crear o actualizar un objeto `User` en lugar de incluir
+Además, solo es necesario incluir los campos necesarios para crear o actualizar un objeto `User` en lugar de incluir
 todos los campos.
 
 El objeto `CreateUserDTO` extiende la clase `PasswordDTO`:
 
-```
+```java
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -309,7 +322,7 @@ La página tiene el formulario para crear un nuevo `User`.
 
 ![Registration](readme-pics/register.png)
 
-```
+```html
 <form th:action="@{/users/signup}" th:method="post" th:object="${model}">
 ```
 
@@ -317,7 +330,7 @@ Si es un `Admin` y quieres crear un nuevo `User`, también se mostrará la opci�
 
 ![Admin user creation](readme-pics/admin-create-user.png)
 
-```
+```html
 <div class="col" sec:authorize="hasAuthority('ADMIN')">
     <label for="role" th:text="'Rol'"></label>
     <select class="form-select" id="role" th:field="*{role}">
@@ -333,7 +346,7 @@ Si es un `Admin` y quieres crear un nuevo `User`, también se mostrará la opci�
 
 Al enviar los datos del nuevo usuario al servidor, se llama al método POST `signup()` del `UserController`:
 
-```
+```java
 @PostMapping("/signup")
   public String signup(@ModelAttribute @Valid CreateUserDTO createUserDTO, BindingResult result,
       Model model,
@@ -366,7 +379,7 @@ Este método tiene 6 pasos:
 
 * [UserRepository.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/repository/UserRepository.java)
 
-```
+```java
 @Override
   public User create(CreateUserDTO userDTO) {
     if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
@@ -410,7 +423,7 @@ Al hacer clic en el enlace 'Inicio sesión' para iniciar sesión, el método GET
 
 La clase `SecurityConfig` es donde se configura el método de iniciar sesión.
 
-```
+```java
 @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.csrf().disable()
@@ -454,7 +467,7 @@ Si el incio de sesión es correcta y el objeto no es nulo, se registra un mensaj
 
 Finalmente, el mensaje de éxito se guarda en el `FlashMap` y se redirige al usuario a la página de inicio mediante la llamada a `super.onAuthenticationSuccess()`.
 
-```
+```java
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
@@ -495,7 +508,7 @@ Al llegar a la página para añadir una nueva persona, el usuario debe ingresar 
 
 Al enviar los datos de una nueva `Person` al servidor, estos llegan al método `addPerson` del controlador `userController`.
 
-```
+```java
 @PostMapping("/add")
   public String addPerson(@ModelAttribute @Valid Person person,
       BindingResult result,
@@ -525,7 +538,7 @@ Este método tiene 5 pasos:
 
 ### PersonService.addPerson(Person person)
 
-```
+```java
 @Override
     public Person add(Person dto) {
         Person person = Person.builder()
@@ -574,7 +587,7 @@ El usuario autenticado encontrará un enlace en el header para crear una pelícu
 
 ![Add film](readme-pics/add-film.png)
 
-```
+```java
 @GetMapping("/add")
   public String createFilm(Model model) {
     model.addAttribute("film", new FilmDTO());
@@ -589,7 +602,7 @@ El usuario autenticado encontrará un enlace en el header para crear una pelícu
 
 La página en sí dispone un formulario para ingresar todos los datos de la película. El formulario se envía al método POST `createFilm()` del `FilmController`.
 
-```
+```java
 @PostMapping("/add")
   public String createFilm(@RequestParam("posterImage") MultipartFile posterImage,
       @ModelAttribute("film") @Valid FilmDTO film,
@@ -619,7 +632,7 @@ Este método tiene 6 pasos:
 
 #### add(Film film)
 
-```
+```java
 @Override
 public Film add(FilmDTO dto, String username) {
     var film = Film.builder()
@@ -649,7 +662,7 @@ El método tiene 4 pasos:
 
 ##### savePoster(Film film , MultipartImage posterImage)
 
-```
+```java
 @Override
   public Film savePoster(Film film, MultipartFile posterImage) {
 
@@ -682,7 +695,7 @@ Para buscar una película en la plataforma, en el header se encuentra el enlace 
 
 ![film search page](readme-pics/search-films.png)
 
-```
+```html
 <form th:method="GET" th:action="@{/films/search-film}">
     <div class="container my-2">
         <div class="row">
@@ -706,7 +719,7 @@ Para buscar una película en la plataforma, en el header se encuentra el enlace 
 
 Al pinchar la carta de una película que se muestra en la página de búsqueda, se envía una solicitud GET al método `filmInfo(UUID uri, Model model,  Authentication authentication)` .
 
-```
+```java
 @GetMapping("/{filmUri}")
   public String filmInfo(@PathVariable("filmUri") UUID uri,
       Model model,
@@ -744,7 +757,7 @@ Este método tiene 6 pasos:
 
 La página siempre muestra toda la información de la película, incluyendo sus reseñas y su puntuación media. Si el usuario está autenticado, se muestra la puntuación que ya ha dado a la película o la opción de dar una puntuación. Además, utiliza un icono de estrella (★) para mostrar al usuario la puntuación de la película.
 
-```
+```html
 <form class="row row-cols g-1 align-items-centre" sec:authorize="isAuthenticated()"
     th:action="@{'/films/score/' + ${film.uri}}"
     th:if="${newScore}" th:method="POST"
@@ -789,7 +802,7 @@ Este proceso tiene 7 pasos:
 
 #### FilmService.updateAvgScore(UUID uri, int avgScore)
 
-```
+```java
 public void updateAvgScore(UUID uri, int avgScore) {
     var film = filmRepository.findByUri(uri).orElse(new Film());
     film.setAvgScore(avgScore);
@@ -815,7 +828,7 @@ Las reseñas de las películas son importantes para nuestros usuarios, ya que le
 
 Las solicitudes HTTP al API utilizan el objeto `ReviewDTO` para enviar y recibir los datos.
 
-```
+```java
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -850,19 +863,9 @@ public class ReviewDTO implements Serializable {
 
 * [ApiController.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/controller/api/ApiController.java)
 
-<!--------------------------------------------------------------------------------------------------
-Primero un usuario se tiene que autenticar con el API y recibir el token JWT. Una vez que lo tenemos y usando el
-utilidad de `httpie-jwt-auth`(https://github.com/teracyhq/httpie-jwt-auth) podemos solicitar todas las reseñas del
-usuario ya autenticado asi:
-
-```
-http --auth-type=jwt --auth="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0b2tpb3NjaG9vbCIsImV4cCI6MTY0OTcwNjE0NSwiaWF0IjoxNjQ5NzA1MDY1fQ.7yDIMR77-Wmr0_1G3ZTNpeGrxeMnJQ9LfAOhMDqeyDs" http://localhost:8080/api/review/user/tokioschool
-```
---------------------------------------->
-
 La solicitud es enviada al método `getUserReviews(@PathVariable Long id, Authentication auth)` del `ApiController`. Usamos el identificador del usuario como path variable en lugar de su nombre. Esto permite a los usuarios acceder a sus propios datos y a los administradores acceder a los datos de cualquier usuario.
 
-```
+```java
 @GetMapping("/user/{id}/reviews")
   public ResponseEntity<List<ReviewDTO>> getUserReviews(
       @Parameter(name = "id", required = true, description = "User's identifier") @PathVariable Long id,
@@ -886,10 +889,9 @@ El método tiene 5 pasos:
 4. La lista de reseñas se convierte en una lista de objetos `ReviewDTO` utilizando el método `convertToDtos`. 
 5. La lista de objetos `ReviewDTO` se devuelve en el cuerpo de la respuesta HTTP como una respuesta `ResponseEntity` con el código de estado `200 (OK)`.
 
-<!--------------------------------------------------------------------------------------------------
 La respuesta recibida aparece así:
 
-```
+```bash
 HTTP/1.1 200
 Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Connection: keep-alive
@@ -912,24 +914,23 @@ X-XSS-Protection: 1; mode=block
     }
 ]
 ```
---------------------------------------->
 
 ### Creando una reseña nueva
 
 Para crear una nueva reseña, es necesario enviar los datos requeridos en una solicitud HTTP adicional, junto con un token JWT válido. Un ejemplo de solicitud para crear una reseña podría ser el siguiente:
 
-```
-http --auth-type=jwt --auth="eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0b2tpb3NjaG9vbCIsImV4cCI6MTY0OTcwODIwMiwiaWF0IjoxNjQ5NzA3MTIyfQ.va2HJxItEScF9BgGONao2yvFHg4eeqyR9lBoB8zfWXE" http://localhost:8080/api/review/new \
-title=Really\ Great\ Film  \
-text=.............................................................................. \
-date=2022-04-11 \
-user=tokioschool \
-film=The\ Fellowship\ of\ The\ Ring
+```bash
+{
+  "title": "Prueba reseña 1",
+  "text": "Esto es una prueba de reseña",
+  "user": "admin",
+  "film": "ca9de12f-80f8-4425-b8e1-ca9283777da3"
+}
 ```
 
 Los datos de la reseña nueva se envían al método `addReview(ReviewDTO reviewDTO)` del `ApiController`.
 
-```
+```java
 @Operation(summary = "Creates a new review for a film", responses = {
       @ApiResponse(responseCode = "200", description = "Created review")
   })
@@ -948,7 +949,7 @@ Este método tiene 4 pasos:
 3. El método `addReview` devuelve el objeto `Review` recién creado. 
 4. El controlador convierte el objeto `Review` en un objeto `ReviewDTO` y devuelve una respuesta HTTP `201 (Created)` con el objeto `ReviewDTO` en el cuerpo de la respuesta.
 
-```
+```java
 private ReviewDTO convertToDto(Review review) {
    return new ReviewDTO(review);
 }
@@ -960,32 +961,26 @@ private List<ReviewDTO> convertToDtos(List<Review> reviews) {
 
 Cuando se recibe la respuesta, esta tiene la siguiente apariencia:
 
-```
-HTTP/1.1 201
-Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-Connection: keep-alive
-Content-Type: application/json
-Date: Mon, 11 Apr 2022 20:01:17 GMT
-Expires: 0
-Keep-Alive: timeout=60
-Pragma: no-cache
-Set-Cookie: JSESSIONID=74DB1997C07EA76B4580D84A6E1766DE; Path=/; HttpOnly
-Transfer-Encoding: chunked
-X-Content-Type-Options: nosniff
-X-XSS-Protection: 1; mode=block
+```bash
+cache-control: no-cache,no-store,max-age=0,must-revalidate 
+connection: keep-alive 
+content-type: application/json 
+date: Tue,21 Mar 2023 19:35:36 GMT 
+expires: 0 
+keep-alive: timeout=60 
+pragma: no-cache 
+transfer-encoding: chunked 
+x-content-type-options: nosniff 
+x-frame-options: DENY 
+x-xss-protection: 1; mode=block 
 
 {
-    "date": "2022-04-11",
-    "film": "The Fellowship of the Ring",
-    "text": "..............................................................................",
-    "title": "Really Great Film",
-    "user": "tokioschool"
+  "title": "Prueba reseña 1",
+  "text": "Esto es una prueba de reseña",
+  "user": "admin",
+  "film": "ca9de12f-80f8-4425-b8e1-ca9283777da3"
 }
 ```
-
-Una vez creada la reseña, se puede visualizar en la página de la película correspondiente.
-
-![newly added review](readme-pics/Newly%20Added%20Review.png)
 
 ### ReviewService
 
@@ -1006,9 +1001,9 @@ El método para cargar las `Review` que pertenecen a un usuario es bastante simp
 
 Sin embargo, el método para crear una nueva `Review` es más complicado.
 
-```
+```java
 @Override
-    public Review add(ReviewDTO reviewDTO) {
+public Review add(ReviewDTO reviewDTO) {
         var username = reviewDTO.getUser();
         var filmUUID = reviewDTO.getFilm();
 
@@ -1042,16 +1037,16 @@ Este método tiene 9 pasos:
 8. Se establece la película y el usuario correspondientes en la nueva `Review`. 
 9. Se guarda la nueva `Review` en el `reviewRepository`.
 
-<!--------------------------------------------------------------------------------------------------
+
 ## Documentación Open API
 
-* [OpenApiConfig.java](https://github.com/ChrisHilborne/FilmFanatics/blob/main/src/main/java/io/chilborne/filmfanatic/config/OpenApiConfig.java)
-* [WebController.java](https://github.com/ChrisHilborne/FilmFanatics/blob/main/src/main/java/io/chilborne/filmfanatic/controller/thymeleaf/WebController.java)
-  Para en el acceso al REST API de la plataforma proporciono documentación de la especificación OpenAPI 3.0 con el
-  Swagger UI. En la clase de configuración `OpenApiConfig` doy la configuración necesaria para la
-  liberaría `Springdocs`.
+* [SwaggerConfig.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/configuration/SwaggerConfig.java)
 
-```
+Para en el acceso al REST API de la plataforma proporciono documentación de la especificación OpenAPI 3.0 con el
+Swagger UI. En la clase de configuración `SwaggerConfig` doy la configuración necesaria para la
+librería `Springdocs`.
+
+```java
  @Bean
   public OpenAPI customOpenAPI() {
     return new OpenAPI()
@@ -1066,28 +1061,17 @@ Este método tiene 9 pasos:
         )
       )
       .info(new Info()
-          .title("Film Fanatic@s")
+          .title("FilmoTokio")
           .description("Proyecto Final Spring de Tokio School")
-        .contact(new Contact()
-          .name("Christopher Hilborne")
-          .email("chris.hilborne@gmail.com")
-          .url("https://github.com/ChrisHilborne"))
-        .version("1.0")
+          .contact(new Contact()
+            .name("Carlos Hidalgo")
+            .email("carloshiloalas@gmail.com")
+            .url("https://github.com/carloshilo"))
+          .version("1.0")
       );
 ```
 
-Creé una método de el `WebController` para hacer lo más fácil llegar a la documentación.
-
-```
-  @RequestMapping(path = "/swagger-ui", method = GET)
-  public String swaggerUi() {
-    return "redirect:/swagger-ui/index.html";
-  }
-```
-Se puede ver la documentación en la
-url [`https://film-fanaticos.herokuapp.com/swagger-ui/index.html`](https://film-fanaticos.herokuapp.com/swagger-ui/index.html)
-y parece asi:
-![swagger-ui](readme-pics/swagger-ui.png)
+Se puede ver la documentación en la url [`http://localhost:8080/swagger-ui/index.html`](http://localhost:8080/swagger-ui/index.html).
 
 
 ## Seguridad
@@ -1100,21 +1084,22 @@ Como en todos los programas, la seguridad de nuestra plataforma es esencial. Nue
 
 ### Seguridad JWT
 
-* [JwtRequestFilter.java](https://github.com/ChrisHilborne/FilmFanatics/blob/main/src/main/java/io/chilborne/filmfanatic/security/jwt/JwtRequestFilter.java)
-* [JwtTokenUtil.java](https://github.com/ChrisHilborne/FilmFanatics/blob/main/src/main/java/io/chilborne/filmfanatic/security/jwt/JwtTokenUtil.java)
-* [JwtAuthenticationEntryPoint.java](https://github.com/ChrisHilborne/FilmFanatics/blob/main/src/main/java/io/chilborne/filmfanatic/security/jwt/JwtAuthenticationEntryPoint.java)
-  Aparte de la seguridad de la pagina web, también hay que segurar el acceso al REST API. Por eso he usado el modo de
-  autenticación de Json Web Token (JWT).
+* [JwtRequestFilter.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/security/jwt/JwtRequestFilter.java)
+* [JwtTokenUtil.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/security/jwt/JwtTokenUtil.java)
+* [JwtAuthenticationEntryPoint.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/security/jwt/JwtAuthenticationEntryPoint.java)
+
+Aparte de asegurar la seguridad de la página web, también es necesario asegurar el acceso al REST API. Por eso, he utilizado el método de autenticación Json Web Token (JWT).
 
 #### JwtRequest y JwtResponse
 
-* [JwtRequest.java](https://github.com/ChrisHilborne/FilmFanatics/blob/main/src/main/java/io/chilborne/filmfanatic/security/jwt/JwtRequest.java)
-* [JwtResponse.java](https://github.com/ChrisHilborne/FilmFanatics/blob/main/src/main/java/io/chilborne/filmfanatic/security/jwt/JwtResponse.java)
-  Usamos los POJOs de `JwtRequest` y `JwtResponse` para enviar los datos de autenticación enter los usuarios y el
-  servidor.
-  El `JwtRequest` contiene solo el `username` y el `password` del usuario.
+* [JwtRequest.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/security/jwt/JwtRequest.java)
+* [JwtResponse.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/security/jwt/JwtResponse.java)
 
-```
+Usamos los POJOs de `JwtRequest` y `JwtResponse` para enviar los datos de autenticación entre los usuarios y el servidor.
+
+`JwtRequest` contiene únicamente el `username` y la `password` del usuario.
+
+```java
 public class JwtRequest {
 
   private String username;
@@ -1123,67 +1108,58 @@ public class JwtRequest {
 }
 ```
 
-El `JwtResponse` contiene el token JWT que el usuario puede usar después para autenticar sus solicitudes siguientes.
+`JwtResponse` contiene el token JWT que el usuario puede utilizar posteriormente para autenticar sus solicitudes siguientes.
 
-```
+```java
 public class JwtResponse {
 
-    @Schema(description = "Authentication Token")
-    private final String token;
+  @Schema(description = "Authentication Token")
+  private final String token;
 
 }
 ```
 
 #### JwtRequestFilter
 
-* [WebSecurityConfig.java](https://github.com/ChrisHilborne/FilmFanatics/blob/main/src/main/java/io/chilborne/filmfanatic/security/WebSecurityConfig.java)
-* [JwtRequestFilter.java](https://github.com/ChrisHilborne/FilmFanatics/blob/main/src/main/java/io/chilborne/filmfanatic/security/jwt/JwtRequestFilter.java)
-  Configuramos la autenticación JWT en el método `configure(HttpSecurity http)` del `WebSecurityConfig`. Mas importante
-  es la adicion del `JWTRequestFilter` al `FilterChain` por cual pasan todas las solicitudes al servidor:
+* [SecurityConfig.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/security/SecurityConfig.java)
+* [JwtRequestFilter.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/security/jwt/JwtRequestFilter.java)
 
-```
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
-    http
-      .csrf()
-        .disable()
-      .authorizeRequests()
-        .antMatchers("/").permitAll()
-        .antMatchers("/register").permitAll()
-        .antMatchers("/login").permitAll()
-        .antMatchers("/film/**").permitAll()
-        .antMatchers("/films/**").permitAll()
-        .antMatchers("/search").permitAll()
-        .antMatchers("/h2-console/**").permitAll()
-        .antMatchers("/v3/api-docs/**" ,"/swagger-ui/**", "swagger-ui.html").permitAll()
-        .antMatchers("/admin/**").hasAnyAuthority(ADMIN_ROLE)
-        .anyRequest().authenticated()
+Configuramos la autenticación JWT en el método `filterChain(HttpSecurity http)` del `SecurityConfig`. Más importante es la adición del `JWTRequestFilter` al `filterChain()` por el cual pasan todas las solicitudes al servidor:
+
+```java
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http.csrf().disable()
+    .authorizeRequests()
+    .antMatchers("/", "/index", "/users/signup",
+        "/swagger-resources",
+        "/swagger-resources/**",
+        "/swagger-ui.html",
+        "/webjars/**",
+        "/v3/api-docs/**",
+        "/swagger-ui/**", "/api/auth").permitAll()
+    .anyRequest().authenticated()
     .and()
-      .exceptionHandling()
-        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+    .formLogin()
+    .successHandler(successHandler)
+    .loginPage("/login").permitAll()
     .and()
-      .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-    .and()
-      .formLogin()
-        .loginPage(LOGIN_URL)
-        .loginProcessingUrl(LOGIN_URL)
-        .successForwardUrl(LOGIN_SUCCESS_URL)
-        .failureUrl(LOGIN_FAILURE)
-    .and()
-      .logout()
-        .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_URL))
-        .logoutSuccessUrl(LOGOUT_SUCCESS_URL)
-    .and()
-      .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-      // in order to allow access to h2-console for testing
-      // TODO remove before release
-      .headers().frameOptions().disable();
+    .logout()
+    .logoutUrl("/logout")
+    .logoutSuccessUrl("/")
+    .permitAll()
+        .and()
+        .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+        .exceptionHandling()
+        .accessDeniedPage("/error_403");
+
+        return http.build();
+        }
 ```
 
 El `JWTRequestFilter` extiende el `OncePerRequestFilter` y solo tiene un metodo:
 
-```
+```java
 @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
     throws ServletException, IOException {
@@ -1224,98 +1200,89 @@ El `JWTRequestFilter` extiende el `OncePerRequestFilter` y solo tiene un metodo:
   }
 ```
 
-Este método tiene 9 pasos:
+Este método tiene 10 pasos:
 
-1. Verifica si la solicitude tiene un header de nombre `Authorization` y que empieza con el `String` ¨Bearer¨, si no
-   pasa la solicitude al proximo filtro en la cadena.
-2. Saca el token JWT del solicitude.
-3. Usa el objeto `JwtTokenUtil` para sacar el nombre del usuario del token.
-4. Si el username existe y no hay una autenticación que ya existe en el `SecurityContext`, carga el objeto `UserDetails`
-   del usuario por el `jwtUserDetails`.
-5. Llama el método `validateToken(String jwtToken, UserDetails userDetails)` de `JwtTokenUtil` para verificar el token
-   JWT.
-6. Crea un objeto `UsernamePasswordAuthenticationToken` con el `userDetails` ya cargado.
-7. Usa un nuevo objeto `WebAuthenticationDetailsSource` para establecer los datos
-   del `UsernamePasswordAuthenticationToken`.
-8. Establece el `Authentication` del `SecurityContext` con el `UsernamePasswordAuthenticationToken` ya creado.
-9. Pasa la solicitude al cadena de filtros para seguir con el procedimiento.
+1. Se comprueba si la petición HTTP incluye una cabecera de autenticación `Authorization`. Si esta cabecera no está presente, se continúa con la ejecución del siguiente filtro en la cadena (si lo hay) o se envía la petición al recurso correspondiente. 
+2. Si la cabecera de autenticación está presente, se comprueba si comienza con la cadena "Bearer". Si no es así, se emite un mensaje de advertencia y se continúa con la ejecución del siguiente filtro en la cadena. 
+3. Si la cabecera comienza con la cadena "Bearer", se extrae el token JWT (Json Web Token) de la cabecera. 
+4. Se utiliza un objeto `JwtTokenUtil` para validar y obtener el nombre de usuario a partir del token JWT. 
+5. Se comprueba que el nombre de usuario no esté vacío y que no haya una autenticación previa para el mismo. Si ambos criterios se cumplen, se carga el objeto `UserDetails` correspondiente al usuario a partir del servicio `JwtUserDetailsService`. 
+6. Se valida el token JWT con el objeto `UserDetails` obtenido. 
+7. Si el token JWT es válido, se crea un objeto `UsernamePasswordAuthenticationToken` con el `UserDetails`, nulo como contraseña y las autoridades del usuario. 
+8. Se establece el objeto `WebAuthenticationDetails` en el objeto `UsernamePasswordAuthenticationToken`. 
+9. Se establece el objeto `UsernamePasswordAuthenticationToken` en el objeto `SecurityContextHolder`. 
+10. Se continúa con la ejecución del siguiente filtro en la cadena (si lo hay) o se envía la petición al recurso correspondiente.
 
 #### Proceso de autenticación
 
-* [ApiAuthenticationController.java](https://github.com/ChrisHilborne/FilmFanatics/blob/main/src/main/java/io/chilborne/filmfanatic/controller/api/ApiAuthenticationController.java)
-  El proceso de autenticación al REST API va asi. Usando `httpie` para conectar con el servidor podemos enviar una
-  solicitude de autenticación asi:
+* [ApiAuthenticationController.java](https://github.com/carloshilo/FilmoTokio/blob/main/src/main/java/com/tokioschool/filmotokio/controller/api/ApiAuthenticationController.java)
 
-```
-http POST http://localhost:8080/api/auth  -a username=tokioschool password=tokioschool
-```
+El proceso de autenticación para el REST API es el siguiente. Utilizando la herramienta `httpie` para conectarse con el servidor, podemos enviar una solicitud de autenticación de la siguiente manera:
 
-El servidor interpreta el `username` y `password` enviados y los transforme en un objeto de `JwtRequest`, lo cual se
-enviá al método `login(@RequestBody JwtRequest authRequest)` del `ApiAuthenticationController`.
-
-```
-@PostMapping(path = "/auth", consumes = "application/json", produces = "application/json")
-  public ResponseEntity<?> login(@RequestBody JwtRequest authRequest) throws Exception
-  {
-    log.info("BEGIN login for username: {}", authRequest.getUsername());
-    authenticate(authRequest.getUsername(), authRequest.getPassword());
-    final UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
-    final String jwtToken = jwtTokenUtil.generateToken(userDetails);
-    log.info("SUCCESS login:: token - {}", jwtToken);
-    return ResponseEntity.ok(new JwtResponse(jwtToken));
-  }
+```bash
+http POST http://localhost:8080/api/auth  -a username=admin password=admin
 ```
 
-Este método tiene 4 pasos:
+El servidor interpreta el `username` y `password` enviados y los convierte en un objeto de tipo `JwtRequest`, que luego se envía al método `login(@RequestBody JwtRequest authRequest)` del controlador `ApiAuthenticationController`.
 
-1. Autentica el usuario con el `username` y `password` enviados.
-2. Carga el `UserDetails` del usuario.
-3. Genera el token JWT para el usuario ya autenticado con el `JwtTokenUtil`.
-4. Devuelve un `ResponseEntity` con el estatus http 200 y el token JWT en el cuerpo.  
-   El método `authenticate(String username, String password)` de `ApiAuthenticationController` es asi:
-
-```
-private void authenticate(String username, String password) throws Exception
-  {
-    try {
-      UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-      authenticationManager.authenticate(authenticationToken);
-    } catch (DisabledException de) {
-      throw new RuntimeException("User disabled", de);
-    } catch (BadCredentialsException bce) {
-      throw new UnauthorizedException("Bad credentials", bce);
-    }
-  }
+```java
+@PostMapping(path = "/auth")
+public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest authRequest) throws Exception {
+        log.info("BEGIN login for username: {}", authRequest.getUsername());
+        authenticate(authRequest.getUsername(), authRequest.getPassword());
+            final var userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
+            final var jwtToken = jwtTokenUtil.generateToken(userDetails);
+        log.info("SUCCESS login:: token - {}", jwtToken);
+        return ResponseEntity.ok(new JwtResponse(jwtToken));
+        }
 ```
 
-El método tiene 2 pasos:
+Este método tiene 7 pasos:
 
-1. Crea un objeto `UsernamePasswordAuthenticationToken` con el `username` y `password` dados.
-2. Intenta autenticar el usuario con una llamada al `AuthenticationManager` que el controlador tiene como dependencia.
-   Cuando recebamos una respuesta, se parece asi con el token JWT en el cuerpo:
+1. Recibe una solicitud HTTP POST en la ruta "/auth" que incluye un objeto JSON `JwtRequest` en el cuerpo de la solicitud. 
+2. Registra en los logs el inicio del proceso de autenticación, indicando el nombre de usuario proporcionado en la solicitud. 
+3. Se llama al método `authenticate()` para autenticar al usuario. Este método comprueba si las credenciales del usuario son correctas utilizando el `AuthenticationManager` de Spring Security. Si las credenciales son incorrectas, se lanza una excepción `BadCredentialsException`. 
+4. Si las credenciales son correctas, se carga el objeto `UserDetails` correspondiente al usuario utilizando el servicio `UserDetailsService`. 
+5. Se genera un token JWT utilizando el objeto `JwtTokenUtil`. 
+6. Se registra en los logs el éxito del proceso de autenticación, mostrando el token JWT generado. 
+7. Se crea un objeto `JwtResponse` que contiene el token JWT generado y se envía como respuesta HTTP al cliente utilizando un objeto `ResponseEntity`.
 
+El método `authenticate(String username, String password)` de `ApiAuthenticationController` es así:
+
+```java
+private void authenticate(String username, String password) throws Exception {
+    var authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+    authenticationManager.authenticate(authenticationToken);
+}
 ```
-HTTP/1.1 200
-Connection: keep-alive
-Content-Type: application/json
-Date: Mon, 11 Apr 2022 19:24:25 GMT
-Keep-Alive: timeout=60
-Transfer-Encoding: chunked
+
+El método tiene 4 pasos:
+
+1. Recibe el nombre de usuario y la contraseña como parámetros. 
+2. Crea un objeto `UsernamePasswordAuthenticationToken` utilizando los parámetros recibidos. Este objeto es un tipo de `Authenticatio`n utilizado por Spring Security para representar la autenticación de un usuario mediante nombre de usuario y contraseña. 
+3. Llama al método `authenticate()` del objeto `AuthenticationManager` para autenticar al usuario. Este método verifica las credenciales del usuario y si son correctas, devuelve un objeto `Authentication` que representa la autenticación exitosa del usuario. Si las credenciales son incorrectas, se lanza una excepción `BadCredentialsException`. 
+4. Si la autenticación es exitosa, el control se devuelve al método `login()` del controlador `ApiAuthenticationController`.
+
+Cuando recibamos una respuesta, se parece asi con el token JWT en el cuerpo:
+
+```bash
+cache-control: no-cache,no-store,max-age=0,must-revalidate 
+connection: keep-alive 
+content-type: application/json 
+date: Tue,21 Mar 2023 19:04:46 GMT 
+expires: 0 
+keep-alive: timeout=60 
+pragma: no-cache 
+transfer-encoding: chunked 
+x-content-type-options: nosniff 
+x-frame-options: DENY 
+x-xss-protection: 1; mode=block 
 
 {
-    "token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0b2tpb3NjaG9vbCIsImV4cCI6MTY0OTcwNjE0NSwiaWF0IjoxNjQ5NzA1MDY1fQ.7yDIMR77-Wmr0_1G3ZTNpeGrxeMnJQ9LfAOhMDqeyDs"
+  "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTY3OTQyNTQ4NiwiZXhwIjoxNjc5NDI2NTY2fQ.0ZRjIHPKrYpZv4jLYo79KPeBX0Qk2iIxt2dUlVbpJg75B1bHY5459Z3XaGqhvtqA_sKK-cEa0jYUUYTGX8eVCA"
 }
-``` 
+```
 
-##### Set-Cookie: JSESSIONID=...
-
-Se nota que aunque el modo de autenticación del RESTful API es con el token JWT y entonces debe ser sin estado (
-stateless) las respuesta siempre contienen un Header con un `Cookie` de la session. Esto he intentado de evitar pero la
-unica manera que he encontrado es crear dos clases de `@Configuration` que extienden el `WebSecurityConfigurerAdapter`
-pero, aunque lo intenté no podía lograr que las dos configuraciones se aplicaran al mismo tiempo - uno a las solicitudes
-de REST y el otro a las solicitudes de la pagina web.
-
---------------------------------------->
 ## Proceso Batch
 
 Como se describe en la descripción del proyecto, he creado un proceso batch para demostrar las habilidades del framework Spring en el procesamiento de grandes cantidades de datos de forma regular.

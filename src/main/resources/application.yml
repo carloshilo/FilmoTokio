@@ -21,8 +21,7 @@ spring:
       max-request-size: 100MB
 
 jwt:
-  secret: tokioschool
-  expiration: 43200
+  secret: cjywupcbsriyckfyirrjqdqpoaepzgtqtaoelspgwzkbdszasvufcbsgkdrxhmncydnuosvvuuvsalrvuwiryfcmtyxypatuhbotewppiimbnqeubytgajrptawqmpwm
 files:
   directory:
     films: static/images/peliculas

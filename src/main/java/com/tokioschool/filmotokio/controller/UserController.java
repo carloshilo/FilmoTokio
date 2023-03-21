@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.support.SessionStatus;
 
+import java.util.Objects;
+
 
 @Slf4j
 @Controller
@@ -47,6 +49,9 @@ public class UserController {
       model.addAttribute("model", createUserDTO);
       model.addAttribute("roles", roleService.findAll());
       return "signup";
+    } if(Objects.isNull(createUserDTO.getRole()))
+    {
+      createUserDTO.setRole(roleService.findById(1));
     }
     userService.create(createUserDTO);
     status.setComplete();

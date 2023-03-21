@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Optional;
 
 import com.tokioschool.filmotokio.domain.User;
-import com.tokioschool.filmotokio.exception.UnauthorizedException;
-import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
 	List<User> findAll();
@@ -20,14 +18,4 @@ public interface UserService {
 	Optional<User> getById(long id);
 
 	User create(CreateUserDTO userDTO);
-
-	void saveImage(User user, MultipartFile file);
-
-	void saveImage(String username, MultipartFile file);
-
-	User update(String oldUsername, User user);
-
-	void delete(String username);
-
-	void changePassword(String username, String oldPassword, String newPassword) throws UnauthorizedException;
 }
